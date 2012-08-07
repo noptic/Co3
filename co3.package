@@ -1,0 +1,6 @@
+name:    co3
+authors:  [Oliver Anan <oliver@ananit.de>]
+license:  ["http://www.gnu.org/licenses/lgpl-3.0-standalone.html"]
+version: 3.0a
+source:  [src]
+  
