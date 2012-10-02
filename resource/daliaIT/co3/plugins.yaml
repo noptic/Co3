@@ -1,0 +1,10 @@
+descriptuon: >
+  daliaIT/co3/plugins.yaml
+  ========================
+  This plugins will be loaded by co3.bootstrap.php
+  
+type:   daliaIT\co3\plugin
+isList: 1
+value:
+  app: 
+    type: daliaIT\co3\app\AppPlugin

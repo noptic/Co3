@@ -1,5 +1,5 @@
 <?php
-namespace com\daliaIT\co3;
+namespace daliaIT\co3;
 interface IMake {
     /**
      * Create a new instance.
@@ -7,5 +7,9 @@ interface IMake {
      * @tag constructor, sugar
      */
      static function mk();
+     
+     static function mkFromArray($args);
+     
+     static function mkMany($argsArray);
 }
 ?>

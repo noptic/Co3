@@ -1,0 +1,29 @@
+Make and Injection
+==========================================================================================
+Two key features of co3 are objects implementing IMake and IInject.
+Both features offer alternative ways to create a instance of an clss.
+
+Make
+------------------------------------------------------------------------------------------
+The IMake interface has two static methods: `mk` and `mkArray`. Both methods can be used 
+to create a new instance od the class.
+
+Instead of `$myOnject = new MyClass($arg1, $arg2)` one can write 
+`MyClass::mk($arg1, $arg2)`or `MyClass::mkArray( array($1, $2) )`
+
+### What is it good for? ###
+Make methods are chainable PHP constructors are not.
+Without chainable constructors ojects can not be used anonymusly:
+    //does not work
+    new BatchCopy( 'output/dir', 'source/dir' )
+        ->setCheckLMT( true )
+        ->ignoreReadOnly( true )
+        ->copy('file1.txt', 'file2.txt', 'file3.txt);
+
+    //works
+    BatchCopy::mk( 'output/dir', 'source/dir' )
+        ->setCheckLMT( true )
+        ->ignoreReadOnly( true )
+        ->copy('file1.txt', 'file2.txt', 'file3.txt);
+    
+

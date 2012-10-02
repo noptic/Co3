@@ -1,0 +1,16 @@
+type:   daliaI.co3.Config;
+value:
+  plugin:
+    type: array
+    value:
+      resource:
+        type: daliaI.co3.resource.ResourcePlugin
+          
+      package:
+        type: daliaI.co3.package.PackagePlugin
+        properties:
+          path: 
+            type: string
+            value: "package"
+
+  
