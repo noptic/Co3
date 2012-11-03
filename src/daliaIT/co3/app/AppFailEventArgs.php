@@ -6,7 +6,7 @@ class AppFailEventArgs extends Inject{
         $exception;
     
     public function getException(){
-        return $this->exception();
+        return $this->exception;
     }
 }
 ?>

@@ -8,10 +8,19 @@ use Exception;
 class AppException extends Exception
 {
     protected 
-        $isHandled;
+        $isHandled,
+        $app;
 
     public function getIsHandled(){
         return $this->isHandled;
+    }
+    
+    public function getApp(){
+        return $this->app;
+    }
+    
+    public function setApp(IApp $app){
+        $this->app = $app;
     }
     
     public function setIsHandled($value){

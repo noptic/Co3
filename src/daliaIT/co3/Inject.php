@@ -12,7 +12,7 @@ class  Inject extends Make implements IInject
                 $instance->$property = $properties[$property];
             }
         }
-        return $instance;
+        return $instance->postInject();
     }
     
     public static function injectMany($propertiesArray){
@@ -33,6 +33,10 @@ class  Inject extends Make implements IInject
     
     protected static function getInjectableProperties(){
         return array_keys( get_class_vars( get_called_class() ) );
+    }
+    
+    protected function postInject(){
+        return $this;
     }
 }
 ?>

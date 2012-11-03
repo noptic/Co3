@@ -2,21 +2,19 @@
 namespace daliaIT\co3;
 use Exception,
     OutOfRangeException;
-class Core extends Inject
+abstract class Core extends Inject
 {
+    protected 
+        $conf; 
+        
     public function __construct(){
         $this->onPluginSet = Event::inject(array('owner' => $this));
     }
     
-    //main instance
-    private static $activeInstance;
+    public abstract function boot($config);
     
-    public static function get(){
-        return Core::$activeInstance;
-    }
-    public function activate(){
-        Core::$activeInstance = $this;
-        return $this;
+    public function getConf(){
+        return $this->conf;
     }
     
     //plugins
@@ -40,6 +38,7 @@ class Core extends Inject
         if($plugin !== $old){
             $this->plugins[$name] = $plugin;
             $plugin->setCore($this);
+            $plugin->init();
             $this->onPluginSet->trigger(
                 ValueChangedEventArgs::inject(array(
                     'oldValue'  => $old,
@@ -49,6 +48,10 @@ class Core extends Inject
             );
         }
         return $this;
+    }
+    
+    public function getPlugins(){
+        return $this->plugins;
     }
     
     public function __get($name){

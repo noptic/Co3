@@ -41,5 +41,9 @@ abstract class Plugin extends Inject implements IPlugin
     public function getCore(){
         return $this->core;
     }
+    
+    public function init(){
+        
+    }
 }
 

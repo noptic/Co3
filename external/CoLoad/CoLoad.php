@@ -89,8 +89,8 @@ use InvalidArgumentException;
     {             
         public
             $map = array(),
-            $extensions = array('.php','.class.php'),
-            $debug;
+            $extensions = array('.php','.class.php');
+
         protected 
             $sources = array(),
             $mapFile;
@@ -99,8 +99,13 @@ use InvalidArgumentException;
             $callback = null,
             $saveOnShutdownSet; 
             
-        public function __construct($mapFile = null){
+        public function __construct(
+            $mapFile = null, 
+            $sources=array(), 
+            $autoRegister=false
+        ){
             $this->mapFile = $mapFile;
+            $this->sources = $sources;
             if($mapFile && is_readable($mapFile)){
                 $this->loadMap();
             }
@@ -108,6 +113,9 @@ use InvalidArgumentException;
             $this->callback = function($name) use ($loader){
                 return $loader->loadSourceCode($name);
             };
+            if($autoRegister){
+                $this->register;
+            }
         }
         
         public function register(){
@@ -119,8 +127,10 @@ use InvalidArgumentException;
         }
         
         public  function addSource($src){
-           $this->sources[] = $src;
-           return $this;
+            if(array_search($src, $this->sources) === false){
+                $this->sources[] = $src;    
+            }
+            return $this;
         }
         
         public  function getSources(){
@@ -141,6 +151,10 @@ use InvalidArgumentException;
         }
         
         public function saveMap(){
+            if(! file_exists($this->mapFile) ){
+                $mapDir = dirname($this->mapFile);
+                mkdir($mapDir, 0777, true);
+            }
             file_put_contents(
                 $this->mapFile,
                 json_encode($this->map)
@@ -171,7 +185,6 @@ use InvalidArgumentException;
         }
         
         public function search($name){
-            if($this->debug) echo __METHOD__."\n";
             $normalized = str_replace(
                 array('\\','_'),
                 DIRECTORY_SEPARATOR,
@@ -180,11 +193,12 @@ use InvalidArgumentException;
             foreach($this->sources as $source){
                 $pathWithoutExtension = 
                     $source . DIRECTORY_SEPARATOR . $normalized;
+                $pathWithoutExtension = preg_replace(
+                    '|/+|','/', $pathWithoutExtension
+                );   
                 foreach($this->extensions as $extension){
                     $path = $pathWithoutExtension . $extension; 
-                    if($this->debug) echo $path;
                     if(is_readable($path)){
-                       if($this->debug) echo " found\n";
                        return $path;
                     }
                     if($this->debug) echo " not found\n";
