@@ -28,6 +28,8 @@ returns the core the plugin is bound to.
 --------------------------------------------------------------------------------
 /*/
 namespace daliaIT\co3;
+use ReflectionProperty;
+
 abstract class Plugin extends Inject implements IPlugin
 {    
        
@@ -42,8 +44,10 @@ abstract class Plugin extends Inject implements IPlugin
         return $this->core;
     }
     
-    public function init(){
-        
+    public function init( $name ){
+        if($this->core->getConfValue("flag/debug")){
+            echo 'DEBUG: '.get_called_class().'::'.__FUNCTION__."\n";
+        }
     }
 }
 

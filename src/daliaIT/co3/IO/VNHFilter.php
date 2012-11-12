@@ -30,21 +30,20 @@ class VNHFilter extends Filter
 {         
     protected
         $loader,
-        $dumper,
-        $typeDefinitions;
+        $dumper;
         
     public function in($data){
         if($this->loader == null){
             throw new Exception("No vnh loader defined");
         }
-        return $this->loader->load($data, $this->typeDefinitions);
+        return $this->loader->load($data);
     }
     
     public function out($data){
         if($this->dumperr == null){
             throw new Exception("No vnh dumper defined");
         }
-        return $this->dumper->dump($data, $this->typeDefinitions);
+        return $this->dumper->dump($data);
     }
     
     public function getIsInFilter(){

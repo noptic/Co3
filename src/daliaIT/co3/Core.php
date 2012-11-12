@@ -6,6 +6,8 @@ abstract class Core extends Inject
 {
     protected 
         $conf; 
+    private
+        $confCache = array();
         
     public function __construct(){
         $this->onPluginSet = Event::inject(array('owner' => $this));
@@ -17,6 +19,45 @@ abstract class Core extends Inject
         return $this->conf;
     }
     
+    public function getConfValue($path){
+        if(! isset($this->confCache[$path])){
+            $parts = explode('/',$path);
+            $current = $this->getConf();
+            foreach($parts as $index => $key){
+                if(! isset($current[$key])){
+                    return null;      
+                }
+                $current = $current[$key];
+            }
+            $this->confCache[$path] = $current;
+        }
+        return $this->confCache[$path];
+    }
+    
+    public function setConfValue($path, $value){
+        $this->confCache[$path] = $value;
+        $parts = explode('/',$path);
+        $current = $this->getConf();
+        $leave = array_pop($parts);
+        foreach($parts as $index => $key){
+            if(! isset($current[$key])){
+                $current[$key] = array();       
+            } else {
+                if(!is_array(current)){
+                    throw new OutOfRangeExcedption(implode("\n",
+                        "Invalid config key. ",
+                        "Element is no array.",
+                        "Path: $path",
+                        "Key: $key",
+                        "Index $index"
+                    ));
+                }
+            }
+            $current = $current[$key];
+        }
+        $current[$leave] = $value;
+        return $this;
+    }
     //plugins
     protected $plugins = array();
     public function pluginExists( $name ){
@@ -37,8 +78,8 @@ abstract class Core extends Inject
             : null;
         if($plugin !== $old){
             $this->plugins[$name] = $plugin;
-            $plugin->setCore($this);
-            $plugin->init();
+            $plugin->setCore( $this );
+            $plugin->init( $name );
             $this->onPluginSet->trigger(
                 ValueChangedEventArgs::inject(array(
                     'oldValue'  => $old,

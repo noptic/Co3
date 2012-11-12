@@ -54,17 +54,17 @@ class FileFilter extends Filter
         $path = $this->search($relativePath);
         if($path === null){
             throw new InvalidArgumentException(
-                "Can not read file '$string"
+                "Can not read file '$relativePath"
             );
         }
         return file_get_contents($path);            
     }
     #:string
     public function search($string){
-        $sring = $this->normalize($string);
+        $string = $this->normalize($string);
         foreach($this->sources as $source){
-            $path = "$source/$string";
-            if(is_readable($path)){
+           $path = "$source/$string";
+           if(is_readable($path)){
                 return $path;    
             }
         }

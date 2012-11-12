@@ -17,10 +17,25 @@ function(){
             ."Missing system file '{$confFile}'"
         );
     }
+    $conf = json_decode( file_get_contents($configFile), true );
+    if( $conf === null) throw new Exception(
+            "co3 Bootstrap error: "
+            ."Parsing config file failed: '{$configFile}'"
+    );
+    $localConfigFile = dirname($_SERVER['SCRIPT_FILENAME'])."/boot.json";
+    if(is_readable($localConfigFile)){
+        $localConfig = json_decode( file_get_contents($localConfigFile), true );
+        if( $localConfig === null) throw new Exception(
+            "co3 Bootstrap error: "
+            ."Parsing local config file failed: '{$localConfigFile}'"
+        );
+        $conf = array_replace_recursive( $conf, $localConfig ); 
+    }
     $conf = array_replace_recursive(
-        json_decode( file_get_contents($configFile), true ),
+        $conf,
         $co3Config
     );
+
     array_walk_recursive(
         $conf,
         function(&$val, $key, $vars){
@@ -76,4 +91,4 @@ function(){
     
     //DFTBA
     $core->boot($conf);
-}, $core, $co3Config);
+});

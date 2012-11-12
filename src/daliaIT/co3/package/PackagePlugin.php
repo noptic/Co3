@@ -5,7 +5,8 @@ class daliaIT\co3\package\PackagePlugin extends daliaIT\co3\Plugin
 Loads co3 packages at runtime
 /*/
 namespace daliaIT\co3\package;
-use OutOfRangeException,
+use Exception,
+    OutOfRangeException,
     daliaIT\co3\Plugin,
     daliaIT\CoLoad\CoLoad,
     daliaIT\co3\util\generator\ArrayGenerator;
@@ -16,7 +17,7 @@ class PackagePlugin extends Plugin{
     #>type int
         LOAD_CLASS = 1,
         LOAD_RESOURCE = 2,
-        LOAD_PLUGINS = 4,
+        #LOAD_PLUGINS = 4,
         LOAD_DEPENDENCIES = 8,
         LOAD_INCLUDES = 16,
         LOAD_ALL = 255;
@@ -24,16 +25,17 @@ class PackagePlugin extends Plugin{
     
     protected
     #>type string[]
-        $packageSrc = array('package'),
-        $packageFileTypes = array(
-            array('name' => 'package.yvnh', 'filter' =>'yaml/vnh')
-        ),
+        $packageSrc = array(),
+        $encoding = array(),
         $loadedPackages = array(),
         $packageOptions =array();
         #<
     
     #:return this
     public function loadPackage($name, $packageDir, Package $package, $options = 255){
+        if( $this->core->getConfValue('flag/debug')){
+            echo "DEBUG: ".__METHOD__." package: ".$name."\n";
+        }
         if( isset($this->loadedPackages[$name]) ){
             $options = $this->mergePackageOptions($name, $package, $options);
         } else {
@@ -43,10 +45,11 @@ class PackagePlugin extends Plugin{
  
         if( ($options & self::LOAD_CLASS) && $package->getSrc()  ){
             $this->addClassSource( $packageDir.'/'.$package->getSrc() );
-        }
+        } 
         if( ($options & self::LOAD_RESOURCE) && $package->getResource() ){
+            
             $this->addFileSource( $packageDir.'/'.$package->getResource() );
-        }
+        } else die('no resource');
         if( ($options & self::LOAD_INCLUDES) && $package->getIncludes() ){        
             foreach($package->getIncludes() as $inc){
                 require_once $packageDir.'/'.$inc;    
@@ -54,15 +57,25 @@ class PackagePlugin extends Plugin{
         }
         if( ($options & self::LOAD_DEPENDENCIES) && $package->getDependencies() ){          
             foreach($package->getDependencies() as $dep){
-                $this->in($dep);
-                #TODO add try..cath and throw Exception containing name of original packsge and dependecy
+                if(! $this->packageLoaded($dep)){
+                    try{
+                        $this->in($dep);
+                    }
+                    catch(Exception $e){
+                        throw new Exception(
+                            "Loading the dependency '$dep' for package '$name' failed.",
+                            0,
+                            $e
+                        );
+                    }
+                }
             }
         }
-        if( ($options & self::LOAD_PLUGINS) && $package->getPlugins() ){
-            foreach($package->getPlugins() as $name => $class){
-                $this->core->setPlugin($name, new $class());
-            }
-        }
+        #if( ($options & self::LOAD_PLUGINS) && $package->getPlugins() ){
+        #    foreach($package->getPlugins() as $name => $class){
+        #        $this->core->setPlugin($name, new $class());
+        #    }
+        #}
         return $this;
     }
     
@@ -87,25 +100,28 @@ class PackagePlugin extends Plugin{
     public function in($name, $options=255){
         foreach(ArrayGenerator::mk(array(
                 'src' => $this->packageSrc,
-                'fileType' => $this->packageFileTypes
+                'fileType' => array_keys($this->encoding)
             )) as $tup){
             $path = implode(
                 '/',
-                array($tup['src'], $name, $tup['fileType']['name'])
+                array($tup['src'], $name, $tup['fileType'])
             );
             if (file_exists($path)){
                 $package = $this->core->IO->in(
                     file_get_contents($path),
-                    $tup['fileType']['filter']
+                    $this->encoding[$tup['fileType']]
                 );
                 if($package instanceof Package){
                     return $this->loadPackage(
                         $name, dirname($path),$package, $options
                     );
                 }
+                
             }
         }
-        #throw exception
+        throw new OutOfRangeException(
+            "Unknown Package: '$name'"    
+        );
     }
     
     #:return int 
@@ -135,6 +151,9 @@ class PackagePlugin extends Plugin{
     
     #:return this
     protected function addFileSource($src){
+        if( $this->core->getConfValue('flag/debug')){
+            echo "DEBUG: ".__METHOD__." src: ".$src."\n";
+        }
         $this
             ->core
             ->IO

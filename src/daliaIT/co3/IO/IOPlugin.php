@@ -52,7 +52,7 @@ class IOPlugin extends Plugin
         if($filters !== null){
              if(! is_array($filters)){
                 if(is_string($filters)){
-                    $filters = explode('/',$filters);    
+                    $filters = explode('|',$filters);    
                 }
                 else $filters = array($filters);
             }
@@ -76,7 +76,7 @@ class IOPlugin extends Plugin
         if($filters !== null){
            if(! is_array($filters)){
                 if(is_string($filters)){
-                    $filters = explode('/',$filters);    
+                    $filters = explode('|',$filters);    
                 }
                 else $filters = array($filters);
            }

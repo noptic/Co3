@@ -21,5 +21,5 @@ namespace daliaIT\co3;
 interface IPlugin {
     function setCore(Core $core);
     function getCore();
-    function init();
+    function init($name);
 }

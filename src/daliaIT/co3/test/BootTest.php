@@ -10,7 +10,7 @@ class BootTest extends App
             'No core found'  
         );
         
-        foreach(array('IO','app') as $vitalPlugin){
+        foreach(array('IO','app','package') as $vitalPlugin){
             if(! $this->core->pluginExists($vitalPlugin) ){ 
                 throw new Exception(
                     "Missing vital plugin: '$vitalPlugin'"

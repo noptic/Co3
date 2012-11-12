@@ -2,6 +2,7 @@
 namespace daliaIT\co3\util\generator;
 use Iterator,
     Countable,
+    InvalidArgumentException,
     daliaIT\co3\Inject;
 class ArrayGenerator extends Inject implements Iterator
 {
@@ -15,6 +16,11 @@ class ArrayGenerator extends Inject implements Iterator
     
     
     public function __construct($groups=array()){
+        foreach($groups as $group){
+            if(! is_array($group)) throw new InvalidArgumentException(
+                "All groups must be arrays.\nGroups: ".var_export($groups,true)
+            );
+        }
         $this->groups = $groups;
         $this->updateLength();
         $this->rewind();

@@ -24,11 +24,58 @@ class SerializationTest extends App
 {
     public
         #:mxed[]
-        $reimportTestData = array(
-            'int'    => 124816,    
-            'bool'   => true,
-            'float'  => 1.23,
-            'string' => "Lorem ipsum\n semper sit"
+        $filterTestData = array(
+            'int'    => array(
+                'out' => array(
+                    array('in'=>    1,      'result' => '1'     ),          
+                    array('in'=>    1234,   'result' => '1234'  ),  
+                    array('in'=>    0,      'result' => '0'     ),   
+                    array('in'=>    -1,     'result' => '-1'    ),  
+                    array('in'=>    1.5,    'result' => '1'     ),   
+                    array('in'=>    '1.5',  'result' => '1'     ),  
+                    array('in'=>    '0',    'result' => '0'     ),  
+                    array('in'=>    '2 bad','result' => '2'     ),
+                    array('in'=>    null,   'result' => '0'     ),
+                ),
+                'in' => array(
+                    array('in'=>    null,   'result' => 0       ),
+                    array('in'=>    '10',   'result' => 10      ),
+                    array('in'=>    '-42',  'result' => -42     ),
+                    array('in'=>    '1.8',  'result' => 1       ),
+                )
+            ),
+            'float' => array(
+                'out' => array(
+                    array('in'=>    10.0,   'result' => '10'    ),
+                    array('in'=>    23.2,   'result' => '23.2'  ),
+                    array('in'=>    -0.1,   'result' => '-0.1'  ),
+                    array('in'=>    0.0,    'result' =>  '0'    ),
+                ),
+                'in' => array(
+                    array('in'=>     '0.3', 'result' => 0.3     ),
+                    array('in'=>     '0',   'result' => 0.0     ),
+                    array('in'=>     '-1.2', 'result' => -1.2   ),
+                    
+                )
+            ),
+            'bool' => array(
+                'out' => array(
+                    array('in'=>    1,      'result' => 'true'  ),
+                    array('in'=>    true,   'result' => 'true'  ),
+                    array('in'=>    24,     'result' => 'true'  ),
+                    array('in'=>    array(1),'result'=>  'true' ),
+                    array('in'=>    -1,     'result' =>  'true' ),
+                    array('in'=>    'true','result'  =>  'true' ),
+                    array('in'=>    0,      'result' =>  'false'),
+                    array('in'=>    false,  'result' =>  'false'),
+                    array('in'=>    'false','result' =>  'false'),
+                    array('in'=>    array(),'result' =>  'false'),
+                    array('in'=>    null,   'result' =>  'false'),
+                ),
+                'in' => array(
+                    array('in'=>     '0.3', 'result' => true    ),
+                )
+            ),
         ),
         $pluginData;
 
@@ -38,50 +85,57 @@ class SerializationTest extends App
         if($this->core == null) throw new Exception(
             'No core found'  
         );
-        $this->testFiltersOnScalarValues();
+        $this->testFilters();
     }
     
-    public function testFiltersOnScalarValues(){
-        $inAndOutFilters = array();      
-        foreach($this->core->IO->getFilters() as $filter){
-            if($filter->getIsInFilter() && $filter->getIsOutFilter() ){
-                $inAndOutFilters[] = $filter;
+    public function testFilters(){
+        foreach($this->filterTestData as $filter => $testDataList){
+            #TODO test if filter exists
+            if(isset ($testDataList['out'])){
+                foreach($testDataList['out'] as $testData){    
+                    $result = $this->core->IO->out($testData['in'], $filter);
+                    if($result !== $testData['result']){
+                        throw new Exception(
+                            implode("\n",array(
+                                "Exported data does not match the excpected result",
+                                "Filter; ".$filter,
+                                "Exported: "
+                                    .gettype($testData['in']).' '
+                                    .var_export($testData['in'],true),
+                                "Expected: "
+                                    .gettype($testData['result']).' '
+                                    .var_export($testData['result'],true),
+                                "Got: "
+                                    .gettype($result).' '
+                                    .var_export($result,true),
+                            ))
+                        );
+                    }
+                }
+            }
+            if(isset ($testDataList['in'])){
+                foreach($testDataList['in'] as $testData){    
+                    $result = $this->core->IO->in($testData['in'], $filter);
+                    if($result !== $testData['result']){
+                        throw new Exception(
+                            implode("\n",array(
+                                "Imported data does not match the excpected result",
+                                "Filter; ".$filter,
+                                "Imported: "
+                                    .gettype($testData['in']).' '
+                                    .var_export($testData['in'],true),
+                                "Expected: "
+                                    .gettype($testData['result']).' '
+                                    .var_export($testData['result'],true),
+                                "Got: "
+                                    .gettype($result).' '
+                                    .var_export($result,true),
+                            ))
+                        );
+                    }
+                }
             }
         }
-        
-        ArrayGenerator::mk( array(
-            array($this), 
-            $this->reimportTestData, 
-            $inAndOutFilters)
-        )
-        ->walk( function($context, $value,$filter){
-            $exported =  $context->getCore()->IO->out($value, $filter);
-            $reimport =  $context->getCore()->IO->in($exported, $filter);
-            if( ($reimport != $value)
-                && (!(
-                    is_array($reimport) 
-                    && (count($reimport) == 1) 
-                    && $reimport[0] == $value
-                ))
-            ){
-                $before = print_r($value, true);
-                $during = print_r($exported, true);
-                $after = print_r($reimport, true);
-                $filter = print_r( $filter, true );
-                throw new Exception(implode("\n", array(
-                    "Scalar value changed by exporting and importing.",
-                    "Before: $before",
-                    "During: $during",
-                    "After: $after",
-                    "Filter: '{$filter}'",
-                    "Note on strings:",
-                    "Linebreak style and trailing whitespace is *not* preserved"
-                    ))
-                );    
-            } 
-        
-        }); 
     }
     
-
 }

@@ -19,17 +19,34 @@
         "tmp":          "#BOOT_DIR#/tmp/#SCRIPT_HASH#",
         "resource":     "#BOOT_DIR#/resource",
         "source":       "#BOOT_DIR#/src",
-        "co3dir":       "#BOOT_DIR#",
-        "package":      "#BOOT_DIR#/.."
+        "co3dir":       "#BOOT_DIR#"
     },
     "package":{
         "location":     "#BOOT_DIR#/package.yvnh",
-        "filter":       "yaml/vnh"
+        "filter":       "yaml|vnh"
     },
     "types":{
-        "string":   {},
-        "int":      {"pattern":      "^[0-9]+$"},  
-        "double":   {"pattern":      "^[0-9]+(\\.[0-9]+)?$"},
-        "bool":     {"converter":    "daliaIT\\co3\\IO\\converter\\BoolConverter"}
+        "string":   "string",
+        "int":      "int",  
+        "float":   "float",
+        "bool":     "bool"
+    },
+    "dependency": [],
+    "plugin":{
+        "package":{
+            "type": "daliaIT\\co3\\package\\PackagePlugin",
+            "value":{
+                "packageSrc": {
+                    "isList": 1,
+                    "value": ["#BOOT_DIR#/.."]
+                },
+                "encoding":{
+                    "package.yvnh": "yaml|vnh",
+                    "package.jvnh": "json|vnh",
+                    "package.pso": "php"
+                }   
+            }
+        },
+        "app": {"type": "daliaIT\\co3\\app\\AppPlugin"}
     }
 }

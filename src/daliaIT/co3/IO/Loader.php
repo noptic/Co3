@@ -22,9 +22,12 @@ use \Exception,
 class Loader extends Inject
 {
     protected 
-        $validate = true;
+        $core;
     
-    public function load($data, $typeDefinitions){
+    public function load($data){
+        $conf = $this->core->getConf();
+        $typeDefinitions = $conf['types'];
+        
         if(! is_array($data) ){
             return $data;
         }
@@ -33,6 +36,9 @@ class Loader extends Inject
                 : null;
         
         if(! isset( $data['type'] ) ){
+            if($value === null && !isset($data['isList'])){
+                return $data;    
+            }
             $type = 'string';
         } else {
             $type = $data['type'];
@@ -48,41 +54,29 @@ class Loader extends Inject
                 if(! isset($element['type']) ){
                     $element['type'] = $type;
                 }
-                $elements[$key] = $this->load($element, $typeDefinitions);
+                $elements[$key] = $this->load($element);
             }
             return $elements;
         }
         
-        if( array_key_exists($type, $typeDefinitions )){
-            return $this->convertString($type, $data['value'], $typeDefinitions);
+        if( isset($typeDefinitions[$type]) ){
+            return $this->convertString($type, $data['value']);
         } else {
             $properties = array();
             if(!$value ) $value = array();
             foreach($value as $name => $proprty){
-                $properties[$name] = $this->load($proprty, $typeDefinitions);
+                $properties[$name] = $this->load($proprty);
             }
             return $type::inject($properties);
         }
     }
     
-    public function convertString($type, $string, $typeDefinitions){
-        if(! array_key_exists($type, $typeDefinitions ) ){
-            throw new Exception(
-                "An error occurred before conversation. "
-                ."The type '$type' is not defined."
-            );
-        }
-        if( $this->validate ){
-            $this->validateString( $type, $string, $typeDefinitions);
-        } 
-        if( isset( $typeDefinitions[$type]['converter'] ) ){
-            $converterClass = $typeDefinitions[$type]['converter'];
-            if(! isset($this->converters[$converterClass]) ){
-                $this->converters[$converterClass] = $converterClass::mk();
-            }
-            $converter = $this->converters[$converterClass];
+    public function convertString($type, $string){
+        $conf = $this->core->getConf();
+        $typeDefinitions = $conf['types'];
+        if( isset( $typeDefinitions[$type]) ){
             try{
-                return $converter->fromString($string);    
+                return $this->core->IO->in($string, $typeDefinitions[$type]);    
             }
             catch ( Exception $e ){
                 throw new Exception(
@@ -92,29 +86,10 @@ class Loader extends Inject
                 );
             }
         } else {
-            return $string;
-        }
-    }
-    
-    public function validateString($type, $string, $typeDefinitions){
-        if( isset( $typeDefinitions[$type]['pattern'] ) ){
-            $result = preg_match(
-                $typeDefinitions[$type]['pattern'],
-                $string
+            throw new Exception(
+                "An error occurred before conversation. "
+                ."The type '$type' is not defined."
             );
-            if($result === false){
-                throw new Exception(
-                    "An error occurred before validation. " 
-                    ."Please check if the validation pattern is corret."
-                );
-            }
-            if($result === 0){
-                throw new Exception(
-                    "An error occurred during validation. "
-                    ."The value does not match the validation pattern"
-                );
-            }
         }
-    }
-    
+    }    
 }
