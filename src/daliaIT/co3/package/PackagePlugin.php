@@ -49,7 +49,7 @@ class PackagePlugin extends Plugin{
         if( ($options & self::LOAD_RESOURCE) && $package->getResource() ){
             
             $this->addFileSource( $packageDir.'/'.$package->getResource() );
-        } else die('no resource');
+        }
         if( ($options & self::LOAD_INCLUDES) && $package->getIncludes() ){        
             foreach($package->getIncludes() as $inc){
                 require_once $packageDir.'/'.$inc;    
@@ -94,6 +94,11 @@ class PackagePlugin extends Plugin{
                 ." Loaded packages: ".implode(',',array_keys($this->loadedPackages))
             );
         }
+    }
+    
+    #:Package
+    public function getPackages(){
+        return $this->loadedPackages;
     }
     
     #:this

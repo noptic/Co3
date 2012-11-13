@@ -9,6 +9,7 @@ namespace daliaIT\co3\IO;
 use Exception,
     OutOfRangeException,
     InvalidArgumentException,
+    daliaIT\co3\Core,
     daliaIT\co3\Plugin;
 
 class IOPlugin extends Plugin
@@ -45,6 +46,9 @@ class IOPlugin extends Plugin
     }
     
     public function setFilter($name, IFilter $filter){
+        if($this->getCore !== null){
+            $filter->setCore($this->getCore()); 
+        }
         $this->filters[$name] = $filter;
     }
     
@@ -100,4 +104,14 @@ class IOPlugin extends Plugin
         return $this
             ->export( $this->import($data, $importFilter), $exportFilter );
     }
+    
+    public function setCore(Core $core){
+        parent::setCore($core);
+        foreach($this->filters as $filter){
+            $filter->setCore($core);
+        }
+        return $this;
+    }
+    
+    
 }

@@ -97,11 +97,24 @@ class Filter extends Inject implements IFilter
     protected 
     #>bool
         $isInFilter = false,
-        $isOutFilter = false;
+        $isOutFilter = false,
         #<
+    #:Core
+        $core;
         
     public function getIsInFilter(){return $this->isInFilter;}
     public function getIsOutFilter(){return $this->isOutFilter;}
+    
+    #:this
+    public function setCore(Core $core){
+        $this->core = $core;
+        return $this;
+    }
+    
+    #:Core
+    public function getCore(){
+        return $this->core;
+    }
     
     #:mixed
     public function out($data){

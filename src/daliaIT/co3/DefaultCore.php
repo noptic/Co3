@@ -87,9 +87,21 @@ class DefaultCore extends Core{
         return $this;
     }
     protected function loadPlugins(){
-        foreach($this->getConfValue('plugin') as $name => $data) {
-            if(! $this->pluginExists($name)){
-                $this->setPlugin($name, $this->IO->in($data, 'vnh'));
+        $pluginConf = $this->getConfValue('plugin');
+        foreach($this->package->getPackages() as $package){
+            foreach($package->getPlugins() as $name => $pluginClass){
+                if($this->pluginExists($name)) continue;
+                if(isset($pluginConf[$name])){
+                    $this->setPlugin(
+                        $name, 
+                        $this->IO->in($pluginConf[$name], 'vnh')
+                    );
+                } else {
+                    $this->setPlugin(
+                        $name, 
+                        new $pluginClass()
+                    );
+                }
             }
         }
         return $this;
