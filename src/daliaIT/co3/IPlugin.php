@@ -18,8 +18,6 @@ Usage
  
 /*/
 namespace daliaIT\co3;
-interface IPlugin {
-    function setCore(Core $core);
-    function getCore();
+interface IPlugin extends IHasCore{
     function init($name);
 }

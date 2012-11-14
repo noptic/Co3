@@ -9,6 +9,7 @@
         "#BOOT_DIR#/src/daliaIT/co3/Core.php",
         "#BOOT_DIR#/src/daliaIT/co3/IEvent.php",
         "#BOOT_DIR#/src/daliaIT/co3/Event.php",
+        "#BOOT_DIR#/src/daliaIT/co3/IHasCore.php",
         "#BOOT_DIR#/src/daliaIT/co3/IPlugin.php",
         "#BOOT_DIR#/src/daliaIT/co3/Plugin.php",
         "#BOOT_DIR#/src/daliaIT/co3/DefaultCore.php"
