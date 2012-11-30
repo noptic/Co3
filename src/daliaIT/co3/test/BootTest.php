@@ -5,7 +5,7 @@ use Exception,
     
 class BootTest extends App
 {
-    public function run(){
+    public function run($args=array()){
         if($this->core == null) throw new Exception(
             'No core found'  
         );

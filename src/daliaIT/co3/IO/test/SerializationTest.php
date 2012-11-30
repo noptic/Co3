@@ -80,7 +80,7 @@ class SerializationTest extends App
         $pluginData;
 
         
-    public function run(){
+    public function run($args=array()){
         parent::run();
         if($this->core == null) throw new Exception(
             'No core found'  

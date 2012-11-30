@@ -29,8 +29,8 @@ Source
 --------------------------------------------------------------------------------
 /*/
 namespace daliaIT\co3\IO;
-use daliaIT\co3\IHasCore;
-interface IFilter extends IHasCore
+use daliaIT\co3\ICoreUser;
+interface IFilter extends ICoreUser
 {
     function in($data);
     function out($data);

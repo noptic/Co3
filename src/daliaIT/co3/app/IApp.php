@@ -5,7 +5,7 @@ use Exception,
 interface IApp
 {
     function boot(Core $core);
-    function run();
+    function run($args=array());
     function fail(Exception $e);
     function shutdown(); 
     

@@ -16,10 +16,11 @@ Source
 /*/
 namespace daliaIT\co3\IO;
 use \Exception,
-    daliaIT\co3\Inject,
+    daliaIT\co3\core,
+    daliaIT\co3\CoreUser,
     daliaIT\co3\IPlugin;
 
-class Loader extends Inject
+class Loader extends CoreUser
 {
     protected 
         $core;
@@ -91,5 +92,9 @@ class Loader extends Inject
                 ."The type '$type' is not defined."
             );
         }
-    }    
+    }
+    
+    public function setCore(Core $core){
+        $this->core = $core;
+    }
 }

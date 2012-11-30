@@ -15,10 +15,16 @@ use Exception,
 class IOPlugin extends Plugin
 {
     protected 
-        $filters;
+        $filters = array();
 
-    public function hasFilter($name){
-        return isset($this->filters[$name]);
+    public function hasFilter($name, $autoLoad=true){
+        if(isset($this->filters[$name])){
+            return isset($this->filters[$name]);
+        } elseif($autoLoad && $this->core->pluginExists('package')) {
+            return (bool) $this->core->pacakge->searchFilter($name);
+        } else {
+            return false;
+        }
     }
     
     public function getFilter($filter){
@@ -31,14 +37,22 @@ class IOPlugin extends Plugin
         if($filter instanceof IFilter){
             return $filter;
         } else {
-            if(! $this->hasFilter($filter)){
-                throw new OutOfRangeException(
-                    "Unkown filter: '$filter'. Registered filters: "
-                    .implode(', ', array_keys($this->filters) )
-                );
+            if(! $this->hasFilter($filter, false)){
+                $filterClass = $this->core->package->searchFilter($filter);
+                if(! $filterClass){
+                    throw new OutOfRangeException(
+                        "Unkown filter: '$filter'. Registered filters: "
+                        .implode(', ', array_keys($this->filters) )
+                    );
+                }
+                $this->setFilter( $filter, new $filterClass() );
             }
             return $this->filters[$filter];
         }
+    }
+    
+    public function filterExists($name, $autoLoad=true){
+        return isset($this->filters[$name]);
     }
     
     public function getFilters(){
@@ -46,7 +60,7 @@ class IOPlugin extends Plugin
     }
     
     public function setFilter($name, IFilter $filter){
-        if($this->getCore !== null){
+        if($this->getCore() !== null){
             $filter->setCore($this->getCore()); 
         }
         $this->filters[$name] = $filter;
@@ -104,14 +118,5 @@ class IOPlugin extends Plugin
         return $this
             ->export( $this->import($data, $importFilter), $exportFilter );
     }
-    
-    public function setCore(Core $core){
-        parent::setCore($core);
-        foreach($this->filters as $filter){
-            $filter->setCore($core);
-        }
-        return $this;
-    }
-    
     
 }

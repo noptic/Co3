@@ -4,7 +4,8 @@ use daliaIT\co3\Inject;
 class RunAppEventArgs extends Inject
 {
     protected
-        $app;
+        $app,
+        $args;
         
     public function getApp(){
         return $this->app;

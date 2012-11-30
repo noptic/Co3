@@ -8,13 +8,16 @@ use Exception,
 class App extends Inject implements IApp
 {    
     protected
-    //events
+    #>Event
         $onBoot,
         $onRun,
         $onFail,
         $onShutdown,
-    //properties
-        $core;
+        #<
+    #:Core
+        $core,
+    #:string[]
+        $requiredPackages=array();
         
     public function __construct(){
         foreach(array('onBoot','onRun','onFail','onShutdown') as $name){
@@ -24,22 +27,41 @@ class App extends Inject implements IApp
         }
     }
     
-    //IApp
+    #:this
     public function boot(Core $core){
         $this->core = $core;
+        foreach($this->requiredPackages as $package){
+            if(!$this->core->package->packageLoaded($package)){
+                $this->core->package->in($package);
+            }
+        }
         $this->onBoot->trigger( AppStepEventArgs::inject(array(
                 'step' => __FUNCTION__
             ))
         );
+        return $this;
     }
     
-    public function run(){
+    #:Package[]
+    public function getRequiredPackages(){
+        return $this->requiredPackages;
+    }
+    
+    #:Plugin[]
+    public function getRequiredPlugins(){
+        return $this->requiredPlugins;
+    }
+    
+    #:mixed
+    public function run($args=array()){
         $this->onRun->trigger( AppStepEventArgs::inject(array(
-                'step' => __FUNCTION__
+                'step' => __FUNCTION__,
+                'args' => $args
             ))
         );
     }
     
+    #:mixed
     public function fail(Exception $e){
         $this->onFail->trigger(AppFailEventArgs::inject(array(
                 'step'      => __FUNCTION__,
@@ -48,6 +70,7 @@ class App extends Inject implements IApp
         );
     }
     
+    #:mixed
     public function shutdown(){
         $this->onShutdown->trigger(AppStepEventArgs::inject(array(
                 'step' => __FUNCTION__
@@ -55,22 +78,27 @@ class App extends Inject implements IApp
         );
     }    
     
+    #:Core
     public function getCore(){
         return $this->core;    
     }
     
+    #:EventHandle
     public function getOnBoot(){ 
         return $this->onBoot->getHandle();
     }
     
+    #:EventHandle
     public function getOnRun(){ 
         return $this->onRun->getHandle();
     }
     
+    #:EventHandle
     public function getOnFail(){ 
         return $this->onFail->getHandle();
     }
     
+    #:EventHandle
     public function getOnShutdown(){ 
         return $this->onShutdown->getHandle();
     }

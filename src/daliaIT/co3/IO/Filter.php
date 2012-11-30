@@ -90,31 +90,19 @@ Source
 namespace daliaIT\co3\IO;
 use daliaIT\co3\Core,
     InvalidArgumentException,
-    daliaIT\co3\Inject;
+    daliaIT\co3\CoreUser;
     
-class Filter extends Inject implements IFilter
+class Filter extends CoreUser implements IFilter
 {    
     protected 
     #>bool
         $isInFilter = false,
-        $isOutFilter = false,
+        $isOutFilter = false;
         #<
-    #:Core
-        $core;
         
     public function getIsInFilter(){return $this->isInFilter;}
     public function getIsOutFilter(){return $this->isOutFilter;}
     
-    #:this
-    public function setCore(Core $core){
-        $this->core = $core;
-        return $this;
-    }
-    
-    #:Core
-    public function getCore(){
-        return $this->core;
-    }
     
     #:mixed
     public function out($data){

@@ -17,9 +17,10 @@ class PackagePlugin extends Plugin{
     #>type int
         LOAD_CLASS = 1,
         LOAD_RESOURCE = 2,
-        #LOAD_PLUGINS = 4,
+        LOAD_PLUGINS = 4,
         LOAD_DEPENDENCIES = 8,
         LOAD_INCLUDES = 16,
+        LOAD_FILTERS = 32,
         LOAD_ALL = 255;
         #<
     
@@ -28,7 +29,9 @@ class PackagePlugin extends Plugin{
         $packageSrc = array(),
         $encoding = array(),
         $loadedPackages = array(),
-        $packageOptions =array();
+        $packageOptions =array(),
+        $filterClasses = array(),
+        $pluginClasses = array();
         #<
     
     #:return this
@@ -71,14 +74,32 @@ class PackagePlugin extends Plugin{
                 }
             }
         }
-        #if( ($options & self::LOAD_PLUGINS) && $package->getPlugins() ){
-        #    foreach($package->getPlugins() as $name => $class){
-        #        $this->core->setPlugin($name, new $class());
-        #    }
-        #}
+        if( ($options & self::LOAD_PLUGINS) && $package->getPlugins() ){
+            foreach($package->getPlugins() as $name => $class){
+                $this->pluginClasses[$name] = $class;
+            }
+        }
+        if( ($options & self::LOAD_FILTERS) && $package->getPlugins() ){
+            foreach($package->getFilters() as $name => $class){
+                $this->filterClasses[$name] = $class;
+            }
+        }
         return $this;
     }
     
+    #:string
+    public function searchPlugin($name){
+        return (isset($this->pluginClasses[$name]))
+            ? $this->pluginClasses[$name]
+            : null;
+    }
+    
+    #:string
+    public function searchFilter($name){
+        return (isset($this->filterClasses[$name]))
+            ? $this->filterClasses[$name]
+            : null;
+    }
     #:bool
     public function packageLoaded($name){
         return isset($this->loadedPackages[$name]);
@@ -105,12 +126,10 @@ class PackagePlugin extends Plugin{
     public function in($name, $options=255){
         foreach(ArrayGenerator::mk(array(
                 'src' => $this->packageSrc,
+                'fileName' => array('package'),
                 'fileType' => array_keys($this->encoding)
             )) as $tup){
-            $path = implode(
-                '/',
-                array($tup['src'], $name, $tup['fileType'])
-            );
+            $path = "{$tup['src']}/$name/{$tup['fileName']}.{$tup['fileType']}";
             if (file_exists($path)){
                 $package = $this->core->IO->in(
                     file_get_contents($path),
@@ -130,7 +149,7 @@ class PackagePlugin extends Plugin{
     }
     
     #:return int 
-    protected function mergePackageOption($name,Package $package, $options){
+    protected function mergePackageOptions($name,Package $package, $options){
         if($package->getId() != 
             $this->loadedPackages[$name]->getId() ){
             throw new Exception(

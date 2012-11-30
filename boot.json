@@ -9,7 +9,8 @@
         "#BOOT_DIR#/src/daliaIT/co3/Core.php",
         "#BOOT_DIR#/src/daliaIT/co3/IEvent.php",
         "#BOOT_DIR#/src/daliaIT/co3/Event.php",
-        "#BOOT_DIR#/src/daliaIT/co3/IHasCore.php",
+        "#BOOT_DIR#/src/daliaIT/co3/ICoreUser.php",
+        "#BOOT_DIR#/src/daliaIT/co3/CoreUser.php",
         "#BOOT_DIR#/src/daliaIT/co3/IPlugin.php",
         "#BOOT_DIR#/src/daliaIT/co3/Plugin.php",
         "#BOOT_DIR#/src/daliaIT/co3/DefaultCore.php"
@@ -20,7 +21,9 @@
         "tmp":          "#BOOT_DIR#/tmp/#SCRIPT_HASH#",
         "resource":     "#BOOT_DIR#/resource",
         "source":       "#BOOT_DIR#/src",
-        "co3dir":       "#BOOT_DIR#"
+        "co3dir":       "#BOOT_DIR#",
+        "root":         "#DOCUMENT_ROOT#",
+        "package":      "#BOOT_DIR#/.."
     },
     "package":{
         "location":     "#BOOT_DIR#/package.yvnh",
@@ -32,21 +35,10 @@
         "float":   "float",
         "bool":     "bool"
     },
-    "dependency": [],
-    "plugin":{
-        "package":{
-            "type": "daliaIT\\co3\\package\\PackagePlugin",
-            "value":{
-                "packageSrc": {
-                    "isList": 1,
-                    "value": ["#BOOT_DIR#/.."]
-                },
-                "encoding":{
-                    "package.yvnh": "yaml|vnh",
-                    "package.jvnh": "json|vnh",
-                    "package.pso": "php"
-                }   
-            }
-        }
-    }
+    "encoding":{
+        "yvnh":     "yaml|vnh",
+        "jvnh":     "json|vnh",
+        "sphp":     "php"
+    },
+    "dependency": []
 }

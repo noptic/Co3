@@ -25,13 +25,18 @@ Source
 --------------------------------------------------------------------------------
 /*/
 namespace daliaIT\co3\IO;
-use Exception;
+use Exception,
+    daliaIT\co3\Core;
 class VNHFilter extends Filter
 {         
     protected
         $loader,
         $dumper;
-        
+    
+    public function __construct(){
+        $this->loader = new Loader();
+    }
+
     public function in($data){
         if($this->loader == null){
             throw new Exception("No vnh loader defined");

@@ -2,7 +2,8 @@
 namespace daliaIT\co3\app;
 use Exception,
     daliaIT\co3\Plugin,
-    daliaIT\co3\Event;
+    daliaIT\co3\Event,
+    daliaIT\co3\util\generator\ArrayGenerator;
     
 class AppPlugin extends Plugin
 {  
@@ -16,14 +17,20 @@ class AppPlugin extends Plugin
         $this->onRunApp = new Event();
     }
     
-    public function runApp(IApp $app){
+    public function in($path, $filters){
+        $app = $this->IO->in($path, $filters);
+        $app->boot($this->core);
+        return $app;
+    }
+    
+    public function runApp(IApp $app, $args=array()){
         $this->stack[] = $app;
         $this->onRunApp->trigger( RunAppEventArgs::inject(array(
             'app' => $app    
         )));
         $app->boot($this->core);
         try{
-            $app->run();    
+            $app->run($args);    
         }
         catch(Exception $e){
             $appException = new AppException( '', 0, $e);

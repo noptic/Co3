@@ -18,6 +18,6 @@ Usage
  
 /*/
 namespace daliaIT\co3;
-interface IPlugin extends IHasCore{
+interface IPlugin extends ICoreUser{
     function init($name);
 }

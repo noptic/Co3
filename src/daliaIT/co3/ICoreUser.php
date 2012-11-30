@@ -1,6 +1,7 @@
 <?php
 namespace daliaIT\co3;
-interface IHasCore{
+interface ICoreUser
+{
     function setCore(Core $core);
     function getCore();
 }
