@@ -2,10 +2,10 @@
 namespace daliaIT\co3\app;
 use Exception,
     daliaIT\co3\Core,
-    daliaIT\co3\Inject,
+    daliaIT\co3\CoreUser,
     daliaIT\co3\Event;
     
-class App extends Inject implements IApp
+class App extends CoreUser implements IApp
 {    
     protected
     #>Event
@@ -14,8 +14,6 @@ class App extends Inject implements IApp
         $onFail,
         $onShutdown,
         #<
-    #:Core
-        $core,
     #:string[]
         $requiredPackages=array();
         
@@ -29,7 +27,7 @@ class App extends Inject implements IApp
     
     #:this
     public function boot(Core $core){
-        $this->core = $core;
+        $this->setCore($core);
         foreach($this->requiredPackages as $package){
             if(!$this->core->package->packageLoaded($package)){
                 $this->core->package->in($package);

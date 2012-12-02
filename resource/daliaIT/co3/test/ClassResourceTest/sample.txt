@@ -1,0 +1,2 @@
+Hello World!
+This is a smaple text for the class resource test.

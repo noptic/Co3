@@ -3,7 +3,12 @@ namespace daliaIT\co3;
 class CoreUser extends Inject implements ICoreUser{
     protected
         $core;
-        
+    
+    public function getResource($name, $class, $filter='file'){
+        $resourcePath = str_replace('\\','/',$class)."/$name";
+        return $this->core->IO->in($resourcePath,$filter);
+    }
+    
     public function getCore(){
         return $this->core;
     }

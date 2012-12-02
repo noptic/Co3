@@ -5,7 +5,7 @@ value:
   author:       Oliver Anan <oliver@ananit.de>
   license:      "http://www.gnu.org/licenses/lgpl-3.0-standalone.html"
   src:          src
-  reaource:     resource
+  resource:     resource
   plugins:
     app:            daliaIT\co3\app\AppPlugin
     loader:         daliaIT\vo3\loader\LoaderPlugin
@@ -25,4 +25,5 @@ value:
   tests:
     boot:           daliaIT\co3\test\BootTest
     serialization:  daliaIT\co3\IO\test\SerializationTest
+    classResource:  daliaIT\co3\test\ClassResourceTest
     

@@ -48,9 +48,8 @@ class PackagePlugin extends Plugin{
  
         if( ($options & self::LOAD_CLASS) && $package->getSrc()  ){
             $this->addClassSource( $packageDir.'/'.$package->getSrc() );
-        } 
+        }
         if( ($options & self::LOAD_RESOURCE) && $package->getResource() ){
-            
             $this->addFileSource( $packageDir.'/'.$package->getResource() );
         }
         if( ($options & self::LOAD_INCLUDES) && $package->getIncludes() ){        
