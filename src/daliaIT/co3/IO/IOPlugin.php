@@ -119,4 +119,7 @@ class IOPlugin extends Plugin
             ->export( $this->import($data, $importFilter), $exportFilter );
     }
     
+    public function __get($name){
+        return $this->getFilter($name);
+    }
 }

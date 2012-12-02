@@ -1,14 +1,14 @@
 <?php
 /*/
-class YAMLFilter
-================================================================================
+author:
+  name:     Oliver Anan
+  mail:     <oliver@ananit.de>
+version:    0.1.1.1
+package:    co3
 
- Ke         | Vakue
- -----------|---------------------------------
- Author     | Oliver Anan \oliver@ananit.de
- Version    | 0.1.1
- Package    | co3
- 
+================================================================================
+class YAMLFilter
+================================================================================ 
 import export filter for YAML
 
 By default this filter will use indent of 2 spaces and wordwrap 80.

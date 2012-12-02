@@ -21,6 +21,7 @@ value:
     json:           daliaIT\co3\IO\JSONFilter
     vnh:            daliaIT\co3\IO\VNHFilter
     file:           daliaIT\co3\IO\FileFilter
+    glob:           daliaIT\co3\IO\GlobFilter
   tests:
     boot:           daliaIT\co3\test\BootTest
     serialization:  daliaIT\co3\IO\test\SerializationTest

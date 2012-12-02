@@ -1,4 +1,5 @@
 <?php
+require __DIR__.'/external/spyc/spyc.php';
 $core = null;
 if(! isset($co3Config) ){
     $co3Config = array();
@@ -10,21 +11,22 @@ function(){
         $core;
         
     //load conf
-    $configFile = __DIR__.'/boot.json';
+    $spyc = new Spyc();
+    $configFile = __DIR__.'/conf.yaml';
     if(! is_readable($configFile)){
         throw new Exception(
             "co3 Bootstrap error: "
             ."Missing system file '{$confFile}'"
         );
     }
-    $conf = json_decode( file_get_contents($configFile), true );
+    $conf = $spyc->load( file_get_contents($configFile), true );
     if( $conf === null) throw new Exception(
             "co3 Bootstrap error: "
             ."Parsing config file failed: '{$configFile}'"
     );
-    $localConfigFile = dirname($_SERVER['SCRIPT_FILENAME'])."/boot.json";
+    $localConfigFile = dirname($_SERVER['SCRIPT_FILENAME'])."/conf.yaml";
     if(is_readable($localConfigFile)){
-        $localConfig = json_decode( file_get_contents($localConfigFile), true );
+        $localConfig = $spyc->load( file_get_contents($localConfigFile), true );
         if( $localConfig === null) throw new Exception(
             "co3 Bootstrap error: "
             ."Parsing local config file failed: '{$localConfigFile}'"
