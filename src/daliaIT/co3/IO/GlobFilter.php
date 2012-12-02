@@ -42,8 +42,9 @@ class GlobFilter extends Filter
     }
     
     public function recursive($filePattern, $base='', $dirPattern='*'){
+        echo $base."\n";
         $files = array();
-        foreach($this->in($base.$filePattern) as $file){
+        foreach($this->in($base.'/'.$filePattern) as $file){
             if(!is_dir($file)) $files[] = $file;
         }
         foreach($this->in($base.'/'.$dirPattern) as $dir){
