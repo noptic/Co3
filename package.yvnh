@@ -1,9 +1,6 @@
 type: daliaIT\co3\package\Package
 value:
-  name:         co3
   id:           1c3e5f21-b9fd-458b-9b01-68544d935296
-  author:       Oliver Anan <oliver@ananit.de>
-  license:      "http://www.gnu.org/licenses/lgpl-3.0-standalone.html"
   src:          src
   resource:     resource
   plugins:

@@ -8,6 +8,7 @@ require:
   - "#BOOT_DIR#/src/daliaIT/co3/IEvent.php"
   - "#BOOT_DIR#/src/daliaIT/co3/Event.php"
   - "#BOOT_DIR#/src/daliaIT/co3/ICoreUser.php"
+  - "#BOOT_DIR#/src/daliaIT/co3/IClassHasResource.php"
   - "#BOOT_DIR#/src/daliaIT/co3/CoreUser.php"
   - "#BOOT_DIR#/src/daliaIT/co3/IPlugin.php"
   - "#BOOT_DIR#/src/daliaIT/co3/Plugin.php"

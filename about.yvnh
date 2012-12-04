@@ -1,0 +1,5 @@
+type: daliaIT\co3\package\PeckageInfo
+value:
+  name:         co3
+  author:       Oliver Anan <oliver@ananit.de>
+  license:      "http://www.gnu.org/licenses/lgpl-3.0-standalone.html"
