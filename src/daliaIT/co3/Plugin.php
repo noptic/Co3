@@ -30,7 +30,7 @@ returns the core the plugin is bound to.
 namespace daliaIT\co3;
 use ReflectionProperty;
 
-abstract class Plugin extends CoreUser implements IPlugin
+abstract class Plugin extends Component implements IPlugin
 {    
        
     protected 

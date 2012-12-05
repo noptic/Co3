@@ -90,9 +90,9 @@ Source
 namespace daliaIT\co3\IO;
 use daliaIT\co3\Core,
     InvalidArgumentException,
-    daliaIT\co3\CoreUser;
+    daliaIT\co3\Component;
     
-class Filter extends CoreUser implements IFilter
+class Filter extends Component implements IFilter
 {    
     protected 
     #>bool

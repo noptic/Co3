@@ -2,10 +2,10 @@
 namespace daliaIT\co3\app;
 use Exception,
     daliaIT\co3\Core,
-    daliaIT\co3\CoreUser,
+    daliaIT\co3\Component,
     daliaIT\co3\Event;
     
-class App extends CoreUser implements IApp
+class App extends Component implements IApp
 {    
     protected
     #>Event

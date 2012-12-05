@@ -29,8 +29,8 @@ Source
 --------------------------------------------------------------------------------
 /*/
 namespace daliaIT\co3\IO;
-use daliaIT\co3\ICoreUser;
-interface IFilter extends ICoreUser
+use daliaIT\co3\IComponent;
+interface IFilter extends IComponent
 {
     function in($data);
     function out($data);
