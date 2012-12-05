@@ -1,5 +1,9 @@
 <?php
 namespace daliaIT\co3;
 interface IClassHasResource{
-    function getResource($name, $class=null, $filter='file');
+    public function getText($path);
+    
+    public function formatArgs($path);
+    
+    public function formatArray($path, array $args);
 }

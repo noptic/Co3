@@ -18,12 +18,12 @@ class ClassResourceTest extends App
             'daliaIT/co3/test/ClassResourceTest/sample.txt',
             'file'
         );
-        $viaResource = parent::getResource('sample.txt',__CLASS__);die();
-        if(viaResource !== $viaIO){
+        $viaGetText = $this->getText('sample.txt',__CLASS__);die();
+        if($viaGetText !== $viaIO){
             throw new Exception(implode("\n",array(
                 "class resource loading failed",
                 "via IO: $viaIO",
-                "via Resource: $viaResource"
+                "via getText: $viaGetText"
             )));
         }
     }
