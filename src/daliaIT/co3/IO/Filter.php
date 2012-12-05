@@ -89,7 +89,7 @@ Source
 /*/
 namespace daliaIT\co3\IO;
 use daliaIT\co3\Core,
-    InvalidArgumentException,
+    LogicException,
     daliaIT\co3\Component;
     
 class Filter extends Component implements IFilter
@@ -107,13 +107,19 @@ class Filter extends Component implements IFilter
     #:mixed
     public function out($data){
         $class = get_called_class();
-        throw new LogicException("$class is not an out filter.");
+        throw new LogicException($this->formatArgs(
+            'daliaIT/co3/NotImplemented.txt',    
+            "$class::".__FUNCTION__
+        ));
     }
     
     #:mixed
     public function in($data){
         $class = get_called_class();
-        throw new LogicException("$class is not a in filter.");
+        throw new LogicException($this->formatArgs(
+            'daliaIT/co3/NotImplemented.txt',    
+            "$class::".__FUNCTION__
+        ));
     }
 }
 ?>

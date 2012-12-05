@@ -11,6 +11,7 @@ class CoreUser extends Inject implements ICoreUser{
     public function setCore(Core $core){
         $this->core = $core;
         $this->injectCore( get_object_vars($this) );
+        return $this;
     }
     
     protected function injectCore($targets){
