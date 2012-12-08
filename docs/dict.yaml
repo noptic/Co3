@@ -1,0 +1,30 @@
+co3:
+  Core:
+    Description: >
+      The core object is a instance of [daliaIT\co3\core][] and manages the
+      interaction between compoonents. All components are visble to the core
+      and the core is visble to all comonents.
+      There can be more than one core at the same time.
+    See: [Component]
+  Component: 
+    Descrition: >
+     Parts of co3s infrastructure are called components. Components are all
+     linked to the core and can access it directly. If a components core is 
+     chanaged it will attemp to change the core of all it´s children.
+    See: [Plugin, Filter, App]
+  Plugin:
+  Filter:
+  App:
+  Package:
+  Packagefile:
+  PackageMeta:
+  Runtime:
+  Encoding:
+  VNH:
+  Tests:
+  Event:
+  DocDown:
+  Maya:
+  Markdown:
+  Yaml:
+  Resource:

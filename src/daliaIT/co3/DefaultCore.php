@@ -1,4 +1,27 @@
 <?php
+/*/
+type:       class
+author:
+  name:     Oliver Anan
+  mail:     <oliver@ananit.de>
+version:    [0,1,0,0]
+tags:       [system core]
+================================================================================
+DefaultCore
+================================================================================
+A core with some essintial plugins already set.
+
+The default co3config will use this core.
+
+List of preset pluins:
+--------------------------------------------------------------------------------
+IO:         daliaIT\co3\IO\IOPlugin
+loader:     daliaIT\co3\loader\LoaderPlugin
+package:    daliaIT\co3\package\PackagePlugin
+
+Source
+--------------------------------------------------------------------------------
+/*/
 namespace daliaIT\co3;
 use Spyc,
     OutOfRangeException,
@@ -8,6 +31,7 @@ use Spyc,
     daliaIT\co3\package\PackagePlugin;
     
 class DefaultCore extends Core{
+    #:this
     public function boot($conf){
         $this->conf = $conf;
         $parser = new Spyc();
@@ -22,6 +46,7 @@ class DefaultCore extends Core{
             ->loadDependencies();
     }
     
+    #:LoaderPlugin
     protected function createLoaderPlugin($rawPackage){
         $src = (isset($rawPackage['src']))
             ? array($this->getConfValue('path/co3dor').'/'.$rawPackage['src'])
@@ -37,12 +62,14 @@ class DefaultCore extends Core{
         ));
     }
     
+    #:this
     protected function createIOPlugin($rawPackage){
         $plugin =  new IOPlugin();
         $this->setPlugin( 'IO', $plugin);
         return $this;
     } 
     
+    #:this
     protected function createPackagePlugin($rawPackage){
         $plugin = PackagePlugin::inject(array(
             'packageOptions'    => array('co3'=> PackagePlugin::LOAD_ALL),
@@ -64,6 +91,7 @@ class DefaultCore extends Core{
         return $this;
     }
     
+    #:\daliaIT\co3\package\Package
     protected function getOwnPackage(){
         return $this->IO->in(
             file_get_contents($this->conf['package']['location']),
@@ -71,6 +99,7 @@ class DefaultCore extends Core{
         );
     }
     
+    #:this
     protected function loadDependencies(){
         $dependecies = $this->getConfValue('dependency');
         if(! $dependecies) return $this;
@@ -80,7 +109,7 @@ class DefaultCore extends Core{
         return $this;
     }
     
-    
+    #:bool
     public function pluginExists( $name, $autoLoad=true ){
         if(isset($this->plugins[$name])){
             return true;
@@ -91,6 +120,7 @@ class DefaultCore extends Core{
         }
     }
     
+    #:Plugin
     public function getPlugin($name){
         if( !$this->pluginExists( $name, false ) ){
             $pluginClass = $this->package->searchPlugin($name);

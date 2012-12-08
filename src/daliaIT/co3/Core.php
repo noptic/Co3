@@ -1,24 +1,95 @@
 <?php
+/*/
+type:       class
+author:
+  name:     Oliver Anan
+  mail:     <oliver@ananit.de>
+version:    [0,1,0,0]
+tags:       [system core]
+================================================================================
+Core
+================================================================================
+Handles component interaction.
+
+The core linkks plugins but provides nearly no logic itself.
+
+Boot
+--------------------------------------------------------------------------------
+After creating the core the boot script will call the boot method to initializ 
+it.
+
+The boot methoid must return the called instance.
+
+Config
+--------------------------------------------------------------------------------
+The core also contains the config, a nested multi dimensional string array.
+Config values can be accesed with simple path expressions:
+
+    $this->getConfValue('encoding/yvnh') === $this->config['encoding']['yvnh'];
+    
+If the path is not set null is returned, so this code should work:
+
+    if($this->getConfValue('require') ){
+        foreach($this->getConfValue('require') as $require){
+            require $require;
+        }
+    }
+
+The path expressions are cached so you do not have to ise temp variables to
+store the results.
+
+Plugins
+--------------------------------------------------------------------------------
+All of co3 functionality is implemented in plugins.
+Plugins should be accesibble over the magic __get method.
+
+    $this->getPlugin('package') === $this->package();
+
+List of Events:
+--------------------------------------------------------------------------------
+onPluginSet: 
+  trigger:  plugin is added or replaced. 
+  emits:    ValueChangedEventArgs
+
+List of  Propertiess:
+--------------------------------------------------------------------------------
+onPluginSet:    Event               raised if plugin is added or replaced.
+plugins:        Plugin[string]      array containing loaded plugins. 
+conf:           sclalar[sclalar]    multidemensional array.
+
+Source
+--------------------------------------------------------------------------------
+/*/
 namespace daliaIT\co3;
 use Exception,
     OutOfRangeException;
 abstract class Core extends Inject
 {
-    protected 
-        $conf; 
-    private
-        $confCache = array();
+    protected
+    #:Event    
+        $onPluginSet,
+    #:Plugin[string]
+        $plugins = array(),
+    #:scalar[scalar]
+        $conf;
         
+    private
+    #:scalar[scalar]
+        $confCache = array();
+    
     public function __construct(){
         $this->onPluginSet = Event::inject(array('owner' => $this));
     }
     
+    #:this
     public abstract function boot($config);
     
+    #:scalar[string]
     public function getConf(){
         return $this->conf;
     }
     
+    #:scalar | scalar[string]
     public function getConfValue($path){
         if(! isset($this->confCache[$path])){
             $parts = explode('/',$path);
@@ -34,6 +105,7 @@ abstract class Core extends Inject
         return $this->confCache[$path];
     }
     
+    #:this
     public function setConfValue($path, $value){
         $this->confCache[$path] = $value;
         $parts = explode('/',$path);
@@ -58,12 +130,13 @@ abstract class Core extends Inject
         $current[$leave] = $value;
         return $this;
     }
-    //plugins
-    protected $plugins = array();
+    
+    #:bool
     public function pluginExists( $name ){
         return isset($this->plugins[$name]);   
     }
     
+    #:Plugin
     public function getPlugin($name){
         if( $this->pluginExists( $name ) ){
             return $this->plugins[$name];
@@ -72,6 +145,7 @@ abstract class Core extends Inject
         }
     }
     
+    #:this
     public function setPlugin($name, IPlugin $plugin){
         $old = ( isset($this->plugins[$name]) )
             ? $this->plugins[$name]
@@ -91,18 +165,17 @@ abstract class Core extends Inject
         return $this;
     }
     
+    #:Plugin[string]
     public function getPlugins(){
         return $this->plugins;
     }
     
+    #:Plugin
     public function __get($name){
         return $this->getPlugin($name);
     }
     
-    //events
-    protected
-        $onPluginSet;
-        
+    #:EventHandle
     public function getOnPluginSet(){
         return $this->onPluginSet->getHandle();
     }
