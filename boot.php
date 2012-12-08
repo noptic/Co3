@@ -9,7 +9,6 @@ function(){
     global
         $co3Config,
         $core;
-        
     //load conf
     $spyc = new Spyc();
     $configFile = __DIR__.'/conf.yaml';
@@ -54,7 +53,8 @@ function(){
             '#CONFIG_DIR#'  => dirname($configFile),
             '#SCRIPT#'      => $_SERVER['SCRIPT_FILENAME'],
             '#SCRIPT_DIR#'  => dirname($_SERVER['SCRIPT_FILENAME']),
-            '#SCRIPT_HASH#' => md5($_SERVER['SCRIPT_FILENAME'])
+            '#SCRIPT_HASH#' => md5($_SERVER['SCRIPT_FILENAME']),
+            '#PACKAGE_DIR#' => dirname(__DIR__)
         )
     );    
     foreach($conf['path'] as $dir){
@@ -77,12 +77,9 @@ function(){
     if(! isset($conf['core']['class'])){
         throw new Exception($exceptionMessage.'core/class');
     }
-    if(! isset($conf[$key]['args'])){
-        $conf['core']['args'] = array();
-    }
     $class = $conf['core']['class'];
     $args = isset( $conf['core']['args'] )
-        ? $conf[$key]['args']
+        ? $conf['core']['args']
         : false;            
     if($args){
         $reflection = new ReflectionClass($class);
@@ -90,7 +87,6 @@ function(){
     } else {
         $core = new $class();
     }
-    
     //DFTBA
     $core->boot($conf);
 });

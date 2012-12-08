@@ -123,6 +123,7 @@ class PackagePlugin extends Plugin{
     
     #:this
     public function in($name, $options=255){
+        $tryedPath = array();
         foreach(ArrayGenerator::mk(array(
                 'src' => $this->packageSrc,
                 'fileName' => array('package'),
@@ -140,10 +141,16 @@ class PackagePlugin extends Plugin{
                     );
                 }
                 
+            } else {
+                $tryedPath[] = $path;
             }
         }
         throw new OutOfRangeException(
-            "Unknown Package: '$name'"    
+            implode("\n",array(
+                "Unknown Package: '$name'",
+                "Searched files:",
+                implode("\n",$tryedPath)."\n"    
+            ))    
         );
     }
     

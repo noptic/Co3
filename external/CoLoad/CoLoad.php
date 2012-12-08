@@ -151,8 +151,8 @@ use InvalidArgumentException;
         }
         
         public function saveMap(){
-            if(! file_exists($this->mapFile) ){
-                $mapDir = dirname($this->mapFile);
+            $mapDir = dirname($this->mapFile);
+            if(! file_exists($mapDir) ){
                 mkdir($mapDir, 0777, true);
             }
             file_put_contents(
@@ -201,7 +201,6 @@ use InvalidArgumentException;
                     if(is_readable($path)){
                        return $path;
                     }
-                    if($this->debug) echo " not found\n";
                 }
             }
             return null;
