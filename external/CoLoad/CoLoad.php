@@ -201,7 +201,6 @@ use InvalidArgumentException;
                     if(is_readable($path)){
                        return $path;
                     }
-                    if($this->debug) echo " not found\n";
                 }
             }
             return null;
