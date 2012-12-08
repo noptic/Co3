@@ -39,7 +39,6 @@ class ArrayGenerator extends Inject implements Iterator
     }
 
     public function current() {
-        $pointer = $this->position;
         $result = array();
         foreach($this->groups as $groupIndex => &$group){
             $result[$groupIndex] = current($group);

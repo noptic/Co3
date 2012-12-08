@@ -5,6 +5,7 @@ use Spyc,
     daliaIT\CoLoad\CoLoad,
     daliaIT\co3\IO\IOPlugin,
     daliaIT\co3\loader\LoaderPlugin,
+    daliaIT\co3\package\Package,
     daliaIT\co3\package\PackagePlugin;
     
 class DefaultCore extends Core{
@@ -24,9 +25,8 @@ class DefaultCore extends Core{
     
     protected function createLoaderPlugin($rawPackage){
         $src = (isset($rawPackage['src']))
-            ? array($this->getConfValue('path/co3dor').'/'.$rawPackage['src'])
+            ? array($this->getConfValue('path/co3dir').'/'.$rawPackage['src'])
             : array();
-            
         $loader = new CoLoad(
             $this->conf['path']['tmp'].'/classMap.json',
             $src
@@ -60,7 +60,13 @@ class DefaultCore extends Core{
                 $this->getConfValue('path/co3dir').'/'.$rawPackage['resource']
             );   
         }
-        $plugin->in('co3');
+        $package = Package::inject($rawPackage);
+        
+        $plugin->loadPackage(
+            'co3', 
+            $this->getConfValue('path/package'), 
+            $package
+        );
         return $this;
     }
     

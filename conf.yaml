@@ -26,8 +26,7 @@ path:
   resource:     "#BOOT_DIR#/resource"
   source:       "#BOOT_DIR#/src"
   co3dir:       "#BOOT_DIR#"
-  root:         "#DOCUMENT_ROOT#"
-  package:      "#BOOT_DIR#/.."
+  package:      "#PACKAGE_DIR#"
 
 package:
   location:     "#BOOT_DIR#/package.yvnh"

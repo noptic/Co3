@@ -53,7 +53,8 @@ function(){
             '#CONFIG_DIR#'  => dirname($configFile),
             '#SCRIPT#'      => $_SERVER['SCRIPT_FILENAME'],
             '#SCRIPT_DIR#'  => dirname($_SERVER['SCRIPT_FILENAME']),
-            '#SCRIPT_HASH#' => md5($_SERVER['SCRIPT_FILENAME'])
+            '#SCRIPT_HASH#' => md5($_SERVER['SCRIPT_FILENAME']),
+            '#PACKAGE_DIR#' => dirname(__DIR__)
         )
     );    
     foreach($conf['path'] as $dir){
