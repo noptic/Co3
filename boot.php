@@ -57,8 +57,9 @@ function(){
             '#PACKAGE_DIR#' => dirname(__DIR__)
         )
     );    
-    foreach($conf['path'] as $dir){
+    foreach($conf['path'] as $name => $dir){
         if(! file_exists($dir)){
+            echo $name;
             mkdir($dir, 0777, true);
         }
     }
@@ -90,3 +91,4 @@ function(){
     //DFTBA
     $core->boot($conf);
 });
+var_dump($core);

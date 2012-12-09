@@ -1,5 +1,6 @@
 require:
   - "#BOOT_DIR#/external/CoLoad/CoLoad.php"
+  - "#BOOT_DIR#/external/log4php/src/main/php/Logger.php"
   - "#BOOT_DIR#/src/daliaIT/co3/IMake.php"
   - "#BOOT_DIR#/src/daliaIT/co3/Make.php"
   - "#BOOT_DIR#/src/daliaIT/co3/IInject.php"
@@ -27,7 +28,8 @@ path:
   source:       "#BOOT_DIR#/src"
   co3dir:       "#BOOT_DIR#"
   package:      "#PACKAGE_DIR#"
-
+  log:          "#BOOT_DIR#/tmp/log.csv"
+  
 package:
   location:     "#BOOT_DIR#/package.yvnh"
   filter:       "yaml|vnh"
@@ -43,4 +45,21 @@ encoding:
   jvnh:     "json|vnh"
   sphp:     "php"
 
+log:
+  rootLogger:
+    appenders: ["default"]
+  appenders: 
+    default:
+      class:     "LoggerAppenderDailyFile"
+      layout:
+        class:    "LoggerLayoutPattern"
+        params:
+          conversionPattern: "%date %level %message %n%exception"
+      params: 
+        file:           "#BOOT_DIR#/log/%s.log"
+        datePattern:    "Y-m-d"
+
+flag:
+  log:      true
+  
 dependency: []

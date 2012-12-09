@@ -8,6 +8,7 @@ value:
     loader:         daliaIT\vo3\loader\LoaderPlugin
     IO:             daliaIT\co3\IO\IOPlugin
     package:        daliaIT\co3\package\PackagePlugin
+    log:            daliaIT\co3\log\LogPlugin
   filters:
     float:          daliaIT\co3\IO\typeFilter\FloatFilter
     int:            daliaIT\co3\IO\typeFilter\IntFilter
