@@ -46,4 +46,28 @@ class LogPlugin extends Plugin{
         } 
         $this->logger->$messageType($text);    
     }
+    
+    public function trace($text){
+        $this->out($text, 'trace');
+    }
+    
+    public function debug($text){
+        $this->out($text, 'debug');
+    }
+    
+    public function info($text){
+        $this->out($text, 'info');
+    }
+    
+    public function warn($text){
+        $this->out($text, 'warn');
+    }
+    
+    public function error($text){
+        $this->out($text, 'error');
+    }
+    
+    public function fatal($text){
+        $this->out($text, 'fatal');
+    }
 }

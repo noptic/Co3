@@ -1,3 +1,8 @@
+timezone: "Europe/London"
+
+flag:
+  log:      true
+  
 require:
   - "#BOOT_DIR#/external/CoLoad/CoLoad.php"
   - "#BOOT_DIR#/external/log4php/src/main/php/Logger.php"
@@ -50,16 +55,14 @@ log:
     appenders: ["default"]
   appenders: 
     default:
-      class:     "LoggerAppenderDailyFile"
+      class:    "LoggerAppenderDailyFile"
+      level:   "info"
       layout:
-        class:    "LoggerLayoutPattern"
+        class:  "LoggerLayoutPattern"
         params:
           conversionPattern: "%date %level %message %n%exception"
       params: 
         file:           "#BOOT_DIR#/log/%s.log"
         datePattern:    "Y-m-d"
-
-flag:
-  log:      true
   
 dependency: []

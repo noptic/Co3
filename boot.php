@@ -9,6 +9,7 @@ function(){
     global
         $co3Config,
         $core;
+
     //load conf
     $spyc = new Spyc();
     $configFile = __DIR__.'/conf.yaml';
@@ -23,7 +24,7 @@ function(){
             "co3 Bootstrap error: "
             ."Parsing config file failed: '{$configFile}'"
     );
-    $localConfigFile = dirname($_SERVER['SCRIPT_FILENAME'])."/conf.yaml";
+    $localConfigFile = __DIR__.'/conf.local.yaml';
     if(is_readable($localConfigFile)){
         $localConfig = $spyc->load( file_get_contents($localConfigFile), true );
         if( $localConfig === null) throw new Exception(
@@ -36,7 +37,7 @@ function(){
         $conf,
         $co3Config
     );
-
+    
     array_walk_recursive(
         $conf,
         function(&$val, $key, $vars){
@@ -63,6 +64,12 @@ function(){
             mkdir($dir, 0777, true);
         }
     }
+            
+    //set timezone
+    if( isset($conf['timezone']) ){
+        date_default_timezone_set($conf['timezone']);
+    }
+    
     //require files
     if(isset($conf['require'])){
         foreach($conf['require'] as $required){
@@ -88,6 +95,12 @@ function(){
     } else {
         $core = new $class();
     }
+
     //DFTBA
     $core->boot($conf);
+    if(isset( $conf['append'] )){
+        foreach($conf['append'] as $script){
+            require $script;
+        }
+    }
 });
