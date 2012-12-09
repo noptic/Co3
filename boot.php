@@ -91,4 +91,3 @@ function(){
     //DFTBA
     $core->boot($conf);
 });
-var_dump($core);
