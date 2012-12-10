@@ -20,6 +20,7 @@ value:
     vnh:            daliaIT\co3\IO\VNHFilter
     file:           daliaIT\co3\IO\FileFilter
     glob:           daliaIT\co3\IO\GlobFilter
+    resource:       daliaIT\co3\IO\ResourceFilter
   tests:
     boot:           daliaIT\co3\test\BootTest
     serialization:  daliaIT\co3\IO\test\SerializationTest

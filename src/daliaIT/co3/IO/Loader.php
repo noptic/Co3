@@ -63,17 +63,16 @@ class Loader extends CoreUser
         if( isset($typeDefinitions[$type]) ){
             return $this->convertString($type, $data['value']);
         } 
-            $properties = array();
-            if(!$value ) $value = array();
-            foreach($value as $name => $proprty){
-                $properties[$name] = $this->load($proprty);
-            }
-            $obj = $type::inject($properties);
-            if(mathod_exists($obj,'__wakeup '){
-                $obj->__wakeup();
-            };
-            return $obj;
+        $properties = array();
+        if(!$value ) $value = array();
+        foreach($value as $name => $proprty){
+            $properties[$name] = $this->load($proprty);
         }
+        $obj = $type::inject($properties);
+        if( method_exists($obj, '__wakeup ') ) {
+            $obj->__wakeup();
+        };
+        return $obj;
     }
     
     public function convertString($type, $string){

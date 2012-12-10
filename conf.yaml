@@ -33,7 +33,6 @@ path:
   source:       "#BOOT_DIR#/src"
   co3dir:       "#BOOT_DIR#"
   package:      "#PACKAGE_DIR#"
-  log:          "#BOOT_DIR#/tmp/log.csv"
   
 package:
   location:     "#BOOT_DIR#/package.yvnh"
@@ -56,7 +55,7 @@ log:
   appenders: 
     default:
       class:    "LoggerAppenderDailyFile"
-      level:   "info"
+      threshold: "WARN"
       layout:
         class:  "LoggerLayoutPattern"
         params:

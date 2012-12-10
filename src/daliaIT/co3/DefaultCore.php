@@ -79,19 +79,12 @@ class DefaultCore extends Core{
             'encoding'          => $this->getConfValue('encoding')
         ));
         $this->setPlugin('package',$plugin);
-        if(
-            isset($rawPackage['resource']) 
-            && $this->IO->filterExists('file')
-        ){
-            $plugin->getFilter('file')->addSource(
-                $this->getConfValue('path/co3dir').'/'.$rawPackage['resource']
-            );   
-        }
+        
         $package = Package::inject($rawPackage);
         
         $plugin->loadPackage(
             'co3', 
-            $this->getConfValue('path/package'), 
+            $this->getConfValue('path/co3dir'), 
             $package
         );
         return $this;

@@ -39,7 +39,7 @@ class FileFilter extends Filter
         #:string[]
         $sources = array(),
         #:bool
-        $isInFilter = false;
+        $isOutFilter = false;
     
     #:this
     public function addSource($source){
@@ -53,19 +53,37 @@ class FileFilter extends Filter
     public function in($relativePath){
         $path = $this->search($relativePath);
         if($path === null){
-            throw new InvalidArgumentException(
-                "Can not read file '$relativePath"
-            );
+            throw new InvalidArgumentException(implode("\n",array(
+                "Can not read file '$relativePath",
+                "Sources:",
+                implode("\n",$this->sources)
+            )));
         }
         return file_get_contents($path);            
     }
     #:string
     public function search($string){
         $string = $this->normalize($string);
+        $log = $this->core->pluginExists('log');
         foreach($this->sources as $source){
            $path = "$source/$string";
+           if($log){
+                $this->core->log->debug(
+                    __METHOD__."($string) try path: \"$path\""
+                );
+           }
            if(is_readable($path)){
+                if($log){
+                    $this->core->log->debug(
+                        __METHOD__."($string) found: \"$path\""
+                    );
+               }
                 return $path;    
+            }
+            if($log){
+                $this->core->log->debug(
+                    __METHOD__."($string) not found: \"$path\""
+                );
             }
         }
         return null;
@@ -76,7 +94,7 @@ class FileFilter extends Filter
         $rawParts = explode('/',$string);
         $finalParts = array();
         foreach($rawParts as $part){
-            switch(§part){
+            switch($part){
                 case '':
                 case '.':
                     break;
