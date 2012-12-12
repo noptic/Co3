@@ -51,10 +51,15 @@ class Loader extends CoreUser
             if(! is_array($value)){
                 throw new Exception("list must be an array");
             }
-            foreach($value as $key => $element){
+            foreach($value as $key => $data){
                 if(! isset($element['type']) ){
+                    $element = array();
                     $element['type'] = $type;
+                    $element['value'] = $data;
+                } else {
+                    $element = $data;
                 }
+                # var_dump($element);die();
                 $elements[$key] = $this->load($element);
             }
             return $elements;
