@@ -26,58 +26,47 @@ class Loader extends CoreUser
         $core;
     
     public function load($data){
-        $conf = $this->core->getConf();
-        $typeDefinitions = $conf['types'];
-        
         if(! is_array($data) ){
             return $data;
-        }
-        $value = ( isset( $data['value'] ) )
-                ? $data['value']
-                : null;
-        
-        if(! isset( $data['type'] ) ){
-            if($value === null && !isset($data['isList'])){
-                return $data;    
-            }
-            $type = 'string';
-        } else {
-            $type = $data['type'];
-        }
-        
-        if( isset($data['isList']) && $data['isList'] ){
-            $elements = array();
-            if(!$value) $value = array();
-            if(! is_array($value)){
-                throw new Exception("list must be an array");
-            }
-            foreach($value as $key => $data){
-                if(! isset($element['type']) ){
-                    $element = array();
-                    $element['type'] = $type;
-                    $element['value'] = $data;
+        } elseif( isset($data['isList']) && $data['isList']) {
+            $items = array();
+            foreach( ( (array) $data['value'] ) as $index => $item ){
+                if(isset( $data['type']) ){
+                    $items[$index] = $this->load(array(
+                        'type' => $data['type'],
+                        'value' => $item
+                    )); 
                 } else {
-                    $element = $data;
+                    $items[$index] = $this->load($item) ;
                 }
-                # var_dump($element);die();
-                $elements[$key] = $this->load($element);
+            } 
+            return $items;
+        } elseif(! isset($data['type'])){
+            $items = array();
+            foreach($data as $name => $item){
+                $items[$name] = $this->load($item);
             }
-            return $elements;
+            return $items;
+        } else {
+            if(! isset($data['value']) ){
+                $data['value'] = null;
+            }
+            if(null !== 
+                ($conv = $this->core->getConfValue("types/{$data['type']}"))
+            ){
+                return $this->convertString($conv, $data['value']);
+            }
+            $class = $data['type'];
+            $properties = array();
+            foreach( ( (array) $data['value'] ) as $name => $property ){
+                $properties[$name] = $this->load($property);
+            }
+            $obj = $class::inject($properties);
+            if( method_exists($obj, '__wakeup ') ) {
+                $obj->__wakeup();
+            }
+            return $obj;
         }
-        
-        if( isset($typeDefinitions[$type]) ){
-            return $this->convertString($type, $data['value']);
-        } 
-        $properties = array();
-        if(!$value ) $value = array();
-        foreach($value as $name => $proprty){
-            $properties[$name] = $this->load($proprty);
-        }
-        $obj = $type::inject($properties);
-        if( method_exists($obj, '__wakeup ') ) {
-            $obj->__wakeup();
-        };
-        return $obj;
     }
     
     public function convertString($type, $string){

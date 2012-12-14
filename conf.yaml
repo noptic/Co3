@@ -47,13 +47,15 @@ types:
 encoding:
   yvnh:     "yaml|vnh"
   jvnh:     "json|vnh"
+  pvnh:     "php|vnh"
   sphp:     "php"
+  txt:      "string"
 
 log:
   rootLogger:
-    appenders: ["default"]
+    appenders: ["file"]
   appenders: 
-    default:
+    file:
       class:    "LoggerAppenderDailyFile"
       threshold: "WARN"
       layout:

@@ -17,12 +17,16 @@ Source
 --------------------------------------------------------------------------------
 /*/
 namespace daliaIT\co3;
+use Exception;
 class Component extends CoreUser implements IClassHasResource{
     
     #:string
     public function getText($path){
+        if($this->core === null){
+            throw new Exception('No core set.');
+        }
         $path = str_replace('\\','/',$path);
-        return $this->core->IO->in($path,'file');
+        return $this->core->IO->file->in($path);
     }
     
     #:string
@@ -35,5 +39,10 @@ class Component extends CoreUser implements IClassHasResource{
     #:string
     public function formatArray($path, array $args){
         return  vsprintf($this->getText($path), $args);
+    }
+    
+    #:mixed
+    public function getResource($path){
+        return $this->core->IO->resource->in($path);
     }
 }

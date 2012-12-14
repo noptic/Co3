@@ -1,0 +1,78 @@
+type: daliaIT\co3\test\ClassTest 
+value:
+  class: daliaIT\co3\Component
+  mocks:
+    FileFilterMock: >
+        class FileFilterMock{
+          public $data = array();
+          public function in($path){
+            if( isset($this->data[$path]) ){
+              return $this->data[$path];
+            } else {
+              throw new Exception("invalid path $path");
+            }
+          }
+        }
+      
+    IOPluginMock: >
+        class IOPluginMock{
+          public $file,$resource;
+          public function __construct(){
+            $this->file = new FileFilterMock;
+             $this->resource = new FileFilterMock;
+          }
+        }
+      
+    CoreMock: >
+        class CoreMock extends daliaIT\co3\Inject{
+          public $IO;
+          public function __construct(){
+              $this->IO = new IOPluginMock();
+          }
+        }
+  constants:
+    MOCK_TEXT: |
+      a sample text
+      with multiple lines.
+  methodTests:
+    isList: true
+    type:   daliaIT\co3\test\MethodTest
+    value:
+      - method: getText
+        description : |
+            Using getText calls the file filter.
+        steps:
+          - $this->core = new CoreMock();
+          - $this->core->IO->file->data["mock/text.txt"] = MOCK_TEXT;
+          - return $this->getText("mock/text.txt") === MOCK_TEXT;
+      
+      - method: getText
+        description : |
+            Calling the method without setting the core 
+            should throw an exception
+        steps:
+          - |
+            try{
+              $this->getText("mock/text.txt");
+              return "No exception thrown";
+            }
+            catch(Exception $e){
+              return true;
+            }
+    
+      - method: getText
+        description : >
+            Requesting a unkown resource should throw
+            an Exception.
+        steps:
+          - $this->core =  new CoreMock();
+          - >
+            try{
+              $this->getText("unset/text.txt");
+              return "No exception thrown";
+            }
+            catch(Exception $e){
+              return true;
+            }
+            
+      

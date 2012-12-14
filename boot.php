@@ -31,7 +31,7 @@ function(){
             "co3 Bootstrap error: "
             ."Parsing local config file failed: '{$localConfigFile}'"
         );
-        $conf = array_replace_recursive( $conf, $localConfig ); 
+        $conf = array_merge_recursive( $conf, $localConfig ); 
     }
     $conf = array_replace_recursive(
         $conf,

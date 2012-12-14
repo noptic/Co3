@@ -64,26 +64,10 @@ class FileFilter extends Filter
     #:string
     public function search($string){
         $string = $this->normalize($string);
-        $log = $this->core->pluginExists('log');
         foreach($this->sources as $source){
            $path = "$source/$string";
-           if($log){
-                $this->core->log->debug(
-                    __METHOD__."($string) try path: \"$path\""
-                );
-           }
            if(is_readable($path)){
-                if($log){
-                    $this->core->log->debug(
-                        __METHOD__."($string) found: \"$path\""
-                    );
-               }
                 return $path;    
-            }
-            if($log){
-                $this->core->log->debug(
-                    __METHOD__."($string) not found: \"$path\""
-                );
             }
         }
         return null;

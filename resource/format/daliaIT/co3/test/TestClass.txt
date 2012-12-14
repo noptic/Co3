@@ -1,0 +1,28 @@
+<?php
+$lastStep = null;
+require "%6$s";
+class %1$s extends %2$s
+{
+    public function %3$s(){
+        $steps = %4$s;
+        global $lastStep;
+        foreach($steps as $index => $step){
+            echo "\nRUNTEST ".basename(__FILE__) .', STEP ,'.$index.', START,';
+            $lastStep = $index;
+            eval($step);
+        }
+        return eval($step);
+    }
+}
+//attached code
+%5$s
+//error handlers
+set_exception_handler(function($e){
+   global $lastStep;
+   echo "\nRUNTEST ".basename(__FILE__) .', STEP ,'.$lastStep.', FAILED, '.$e->getMessage();
+   echo "\nRUNTEST ".basename(__FILE__) .', RESULT, FAILED';
+});
+//run test
+echo (%1$s::mk()->%3$s())
+    ?"\nRUNTEST, ".basename(__FILE__) .', RESULT, OK'
+    :"\nRUNTEST, ".basename(__FILE__) .', RESULT, FAILED';

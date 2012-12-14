@@ -1,0 +1,8 @@
+spl_autoload_register( function($name){
+    static $mocks = %s;
+    if(isset($mocks[$name])){
+        eval($mocks[$name]);
+    } else {
+        return false;
+    }
+});
