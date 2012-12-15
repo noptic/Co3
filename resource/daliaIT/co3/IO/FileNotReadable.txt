@@ -1,3 +1,0 @@
-File not readable
-=================
-The file "%s" was found but could not be read.

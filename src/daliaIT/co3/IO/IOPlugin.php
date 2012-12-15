@@ -18,13 +18,7 @@ class IOPlugin extends Plugin
         $filters = array();
 
     public function hasFilter($name, $autoLoad=true){
-        if(isset($this->filters[$name])){
-            return isset($this->filters[$name]);
-        } elseif($autoLoad && $this->core->pluginExists('package')) {
-            return (bool) $this->core->pacakge->searchFilter($name);
-        } else {
-            return false;
-        }
+        return isset($this->filters[$name]);
     }
     
     public function getFilter($filter){
@@ -38,14 +32,10 @@ class IOPlugin extends Plugin
             return $filter;
         } else {
             if(! $this->hasFilter($filter, false)){
-                $filterClass = $this->core->package->searchFilter($filter);
-                if(! $filterClass){
-                    throw new OutOfRangeException(
-                        "Unkown filter: '$filter'. Registered filters: "
-                        .implode(', ', array_keys($this->filters) )
-                    );
-                }
-                $this->setFilter( $filter, new $filterClass() );
+                $this->setFilter( 
+                    $filter, 
+                    $this->getResource("filter/$filter.filter.yvnh") 
+                );
             }
             return $this->filters[$filter];
         }
@@ -64,6 +54,7 @@ class IOPlugin extends Plugin
             $filter->setCore($this->getCore()); 
         }
         $this->filters[$name] = $filter;
+        return $this;
     }
     
     public function in($data, $filters=null){

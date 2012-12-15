@@ -17,10 +17,8 @@ class PackagePlugin extends Plugin{
     #>type int
         LOAD_CLASS = 1,
         LOAD_RESOURCE = 2,
-        LOAD_PLUGINS = 4,
         LOAD_DEPENDENCIES = 8,
         LOAD_INCLUDES = 16,
-        LOAD_FILTERS = 32,
         LOAD_ALL = 255;
         #<
     
@@ -29,16 +27,11 @@ class PackagePlugin extends Plugin{
         $packageSrc = array(),
         $encoding = array(),
         $loadedPackages = array(),
-        $packageOptions =array(),
-        $filterClasses = array(),
-        $pluginClasses = array();
+        $packageOptions =array();
         #<
     
-    #:return this
+    #:this
     public function loadPackage($name, $packageDir, Package $package, $options = 255){
-        if( $this->core->getConfValue('flag/debug')){
-            echo "DEBUG: ".__METHOD__." package: ".$name."\n";
-        }
         if( isset($this->loadedPackages[$name]) ){
             $options = $this->mergePackageOptions($name, $package, $options);
         } else {
@@ -73,32 +66,9 @@ class PackagePlugin extends Plugin{
                 }
             }
         }
-        if( ($options & self::LOAD_PLUGINS) && $package->getPlugins() ){
-            foreach($package->getPlugins() as $name => $class){
-                $this->pluginClasses[$name] = $class;
-            }
-        }
-        if( ($options & self::LOAD_FILTERS) && $package->getPlugins() ){
-            foreach($package->getFilters() as $name => $class){
-                $this->filterClasses[$name] = $class;
-            }
-        }
         return $this;
     }
     
-    #:string
-    public function searchPlugin($name){
-        return (isset($this->pluginClasses[$name]))
-            ? $this->pluginClasses[$name]
-            : null;
-    }
-    
-    #:string
-    public function searchFilter($name){
-        return (isset($this->filterClasses[$name]))
-            ? $this->filterClasses[$name]
-            : null;
-    }
     #:bool
     public function packageLoaded($name){
         return isset($this->loadedPackages[$name]);
@@ -181,14 +151,7 @@ class PackagePlugin extends Plugin{
     
     #:return this
     protected function addFileSource($src){
-        if( $this->core->getConfValue('flag/debug')){
-            echo "DEBUG: ".__METHOD__." src: ".$src."\n";
-        }
-        $this
-            ->core
-            ->IO
-            ->getFilter('file')
-            ->addSource( $src );
+        $this->core->IO->file->addSource( $src );
         return $this;
     }
 }

@@ -14,10 +14,6 @@ class Package extends Inject
         #<
         
     #>type string[]
-        $plugins = array(),
-        $apps = array(),
-        $filters = array(),
-        $tests = array(),
         $includes = array(),
         #<
         
@@ -53,26 +49,6 @@ class Package extends Inject
     #:string
     public function getResource(){
         return $this->resource;
-    }
-    
-    #:string[]
-    public function getPlugins(){
-        return $this->plugins;
-    }
-    
-    #:string[]
-    public function  getFilters(){
-        return $this->filters;    
-    }
-    
-    #:string[]
-    public function getApps(){
-        return $this->apps;
-    }
-    
-    #:string[]
-    public function getTests(){
-        return $this->tests;
     }
     
     #:string[]

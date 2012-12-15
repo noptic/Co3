@@ -24,9 +24,14 @@ Source
 /*/
 namespace daliaIT\co3;
 use Spyc,
+    Exception,
     OutOfRangeException,
     daliaIT\CoLoad\CoLoad,
     daliaIT\co3\IO\IOPlugin,
+    daliaIT\co3\IO\FileFilter,
+    daliaIT\co3\IO\ResourceFilter,
+    daliaIT\co3\IO\YAMLFilter,
+    daliaIT\co3\IO\VNHFilter,
     daliaIT\co3\loader\LoaderPlugin,
     daliaIT\co3\package\Package,
     daliaIT\co3\package\PackagePlugin;
@@ -64,8 +69,12 @@ class DefaultCore extends Core{
     
     #:this
     protected function createIOPlugin($rawPackage){
-        $plugin =  new IOPlugin();
-        $this->setPlugin( 'IO', $plugin);
+        $this->setPlugin( 'IO', IOPlugin::mk()
+            ->setFilter('file', new FileFilter() )
+            ->setFilter('resource', new ResourceFilter() )
+            ->setFilter('yaml', new YAMLFilter() )
+            ->setFilter('vnh', new VNHFilter() )
+        );
         return $this;
     } 
     
@@ -73,13 +82,10 @@ class DefaultCore extends Core{
     protected function createPackagePlugin($rawPackage){
         $plugin = PackagePlugin::inject(array(
             'packageOptions'    => array('co3'=> PackagePlugin::LOAD_ALL),
-            'filterClasses'     => $rawPackage['filters'],
-            'pluginClasses'     => $rawPackage['plugins'],
-            'packageSrc'        => array($this->getConfValue('path/package')),
+            'packageSrc'        => array( $this->getConfValue('path/package') ),
             'encoding'          => $this->getConfValue('encoding')
         ));
         $this->setPlugin('package',$plugin);
-        
         $package = Package::inject($rawPackage);
         
         $plugin->loadPackage(
@@ -88,14 +94,6 @@ class DefaultCore extends Core{
             $package
         );
         return $this;
-    }
-    
-    #:\daliaIT\co3\package\Package
-    protected function getOwnPackage(){
-        return $this->IO->in(
-            file_get_contents($this->conf['package']['location']),
-            $this->conf['package']['filter']
-        );
     }
     
     #:this
@@ -122,12 +120,10 @@ class DefaultCore extends Core{
     #:Plugin
     public function getPlugin($name){
         if( !$this->pluginExists( $name, false ) ){
-            $pluginClass = $this->package->searchPlugin($name);
-            if(! $pluginClass){
-                throw new  OutOfRangeException("Unkown Plugin '$name'");
-            } else {
-                $this->setPlugin( $name, new $pluginClass() );
-            } 
+            $this->setPlugin( 
+                $name, 
+                $this->IO->resource->in("plugin/$name.yvnh") 
+            );
         }
         return $this->plugins[$name];
     }
