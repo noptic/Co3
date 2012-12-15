@@ -6,12 +6,18 @@ class ClassTest extends Test{
     #:string
         $class,
     #:MethodTest[]
-        $methodTests;
-    
+        $methodTests,
+    #:string[]
+        $mocks      = array();
     public function getMethodTests(){
         return $this->methodTests;
     }
-    
+   
+    #:string[]
+    public function getMocks(){
+        return $this->mocks;
+    }
+
     public function getClass(){
         return $this->class;
     }

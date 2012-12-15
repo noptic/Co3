@@ -1,74 +1,66 @@
 <?php
 namespace daliaIT\co3\test;
-use daliaIT\Plugin;
+use daliaIT\co3\CoreUser;
 
-class ClassTestCompiler{
-    protected
-    #:string
-        $bootScript,
-    #:bool
-        $useOpenTag = false;
-    
+class ClassTestCompiler extends CoreUser{    
     public function out(
         ClassTest $classTest,
         $className      = 'TEST____CLASS', 
         $methodName     = 'TEST____METHOD',
         $format   = 'format/daliaIT/co3/test/TestClass.txt'
     ){
-        $scripts = array();
-        foreach($classTest->getMethodTests() as $methodTest){
-            $scripts[] = $this->compileMethodTest(
-                $this, 
+        $script = $this->createAutoloader($classTest->getMocks());
+        foreach($classTest->getMethodTests()as $index => $methodTest){
+            $script .= $this->compileMethodTest(
+                $classTest, 
                 $methodTest,
-                $className,
-                $methodName,
-                $format
+                $className.$index,
+                $methodName.$index,
+                $format,
+                $classTest->getClass() . '-' . $index
             );
         }
+        return $script;
     }
     
     protected function compileMethodTest( 
         ClassTest $classTest,
-        MethodTest $metthodTest,
+        MethodTest $methodTest,
         $className, 
         $methodName,
-        $format
+        $format,
+        $testName
     ){
         $steps = var_export($methodTest->getSteps(),true);
-        
-        $autoloader = $this->createAutoloader(array_replace(
-            $classTest->getMocks(), 
-            $methodTest->getMocks()
+        $autoloader = $this->createAutoloader($classTest->getMocks());        
+        $vars = $this->creatVarDefinitions(array_replace(
+            $classTest->getVars(), 
+            $methodTest->getVars()
         ));
-        
-        $constants = $this->creatConstantDefinitions(array_replace(
-            $classTest->getConstants(), 
-            $methodTest->getConstants()
-        ));
-        
-        $script = $core->IO->formatArgs(
+        $script = $this->core->IO->formatArgs(
             $format,
             $className,
+            $classTest->getClass(),
             $methodName,
-            $steps,
-            $autoloader . $constants,
-            $this->bootScript
+            $steps, 
+            $vars,
+            $testName
         );
+        return $script;
     }
     
     protected function createAutoloader(array $mocks){
-        return $this->formatArgs(
+        return $this->core->IO->formatArgs(
             'format/daliaIT/co3/test/MockAutoloader.txt',
-            var_export($test->getMocks(),true)
+            var_export($mocks, true)
         );
     }
     
-    protected function creatConstantDefinitions(array $constants){
-        $definitions = '';
-        foreach($constants as $name => $value){
-            $definitions = "define('$name',".var_export($value, true).');';
+    protected function creatVarDefinitions(array $vars){
+        $definitions = '/*vars*/';
+        foreach($vars as $name => $value){
+            $definitions .= "\$$name = ".var_export($value, true).';';
         }
         return $definitions;
     }
 }
-?>

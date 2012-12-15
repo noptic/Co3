@@ -26,6 +26,7 @@ namespace daliaIT\co3;
 use Spyc,
     Exception,
     OutOfRangeException,
+    UnexpectedValueException,
     daliaIT\CoLoad\CoLoad,
     daliaIT\co3\IO\IOPlugin,
     daliaIT\co3\IO\FileFilter,
@@ -117,12 +118,25 @@ class DefaultCore extends Core{
         }
     }
     
-    #:Plugin
+    #:IPlugin
     public function getPlugin($name){
         if( !$this->pluginExists( $name, false ) ){
+            $plugin = $this->IO->resource->in("plugin/$name.plugin.yvnh");
+            if(! $plugin instanceof IPlugin){
+                $type = (is_object($plugin))
+                    ? get_class($plugin)
+                    : gettype($plugin);
+                throw new UnexpectedValueException(
+                    $this->IO->formatArgs(
+                        'format/daliaIT/co3/WrongType.txt',
+                        'Plugin',
+                        'daliaIT\\co3\\IPlugin',
+                        $type
+                    )
+                );
+            }
             $this->setPlugin( 
-                $name, 
-                $this->IO->resource->in("plugin/$name.yvnh") 
+                $name,  $plugin
             );
         }
         return $this->plugins[$name];

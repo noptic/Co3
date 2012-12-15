@@ -30,10 +30,9 @@ value:
               $this->IO = new IOPluginMock();
           }
         }
-  constants:
-    MOCK_TEXT: |
-      a sample text
-      with multiple lines.
+  vars:
+    text: a sample text
+    path: mock/text.txt
   methodTests:
     isList: true
     type:   daliaIT\co3\test\MethodTest
@@ -43,8 +42,8 @@ value:
             Using getText calls the file filter.
         steps:
           - $this->core = new CoreMock();
-          - $this->core->IO->file->data["mock/text.txt"] = MOCK_TEXT;
-          - return $this->getText("mock/text.txt") === MOCK_TEXT;
+          - $this->core->IO->file->data[$path] = $text;
+          - return $this->getText($path) === $text;
       
       - method: getText
         description : |
