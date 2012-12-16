@@ -1,19 +1,33 @@
+
+################################################################################
+# %6$s
+################################################################################
 $lastStep = null;
+$testLog = '';
 class %1$s extends %2$s
 {
-    public function %3$s(){
+    public function %3$s(&$log){
         %5$s
+        
         global $lastStep;
         $steps = %4$s;
+        echo "\nSTART,%6$s\036";
         foreach($steps as $index => $step){
-            echo "\nTEST %6$s: STEP $index";
+            echo "\nSTEP,%6$s,$index\036";
+            unset($vars);
             $lastStep = $index;
-            eval($step);
+            $lastResult = eval($step);
+            $vars = get_defined_vars();
+            foreach(array('steps','lastStep','index','lastResult','log') as $kill){
+                unset($vars[$kill]);
+            }
+            unset($kill);
+            $log .="\nvars after step $index:\n".var_export($vars,true);
         }
-        return eval($step);
+        return $lastResult;
     }
 }
 
-echo (%1$s::mk()->%3$s())
-    ?"\nTEST %6$s: RESULT OK"
-    :"\nTEST %6$s: RESULT FAILED";
+echo (%1$s::mk()->%3$s($testLog))
+    ?"\nPASSED,%6$s\036"
+    :"\nFAILED,%6$s,$testLog\036";

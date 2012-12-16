@@ -26,7 +26,11 @@ class Component extends CoreUser implements IClassHasResource{
             throw new Exception('No core set.');
         }
         $path = str_replace('\\','/',$path);
-        return $this->core->IO->file->in($path);
+        $result = $this->core->IO->file->in($path);
+        if(!$result){
+            throw new Exception("Could not find text: '$path'");
+        }
+        return $result;
     }
     
     #:string
@@ -38,6 +42,9 @@ class Component extends CoreUser implements IClassHasResource{
     
     #:string
     public function formatArray($path, array $args){
+        if($this->core === null){
+            throw new Exception('No core set.');
+        }
         return  vsprintf($this->getText($path), $args);
     }
     

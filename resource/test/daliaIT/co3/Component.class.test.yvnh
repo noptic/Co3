@@ -31,35 +31,47 @@ value:
           }
         }
   vars:
-    text: a sample text
-    path: mock/text.txt
+    text:           a sample text
+    textPath:       mock/text.txt
+    format:         say %s and %s
+    formatPath:     mock/format.txt
+    formatedText:   say one and two
+    args:           [one, two]
+    
   methodTests:
     isList: true
     type:   daliaIT\co3\test\MethodTest
     value:
-      - method: getText
+      _01_getText_works:
+        method: getText
         description : |
             Using getText calls the file filter.
         steps:
           - $this->core = new CoreMock();
-          - $this->core->IO->file->data[$path] = $text;
-          - return $this->getText($path) === $text;
+          - $this->core->IO->file->data[$textPath] = $text;
+          - $log .= "set text '$text',";
+          - $result = $this->getText($textPath);
+          - $log .= " result '$result',";
+          - return $result === $text;
       
-      - method: getText
+      _02_getText_without_core:
+        method: getText
         description : |
             Calling the method without setting the core 
             should throw an exception
         steps:
           - |
             try{
-              $this->getText("mock/text.txt");
-              return "No exception thrown";
+              $this->getText($textPath);
+              $log .= "No exception thrown";
+              return false;
             }
             catch(Exception $e){
               return true;
             }
     
-      - method: getText
+      _03_unkown_text:
+        method: getText
         description : >
             Requesting a unkown resource should throw
             an Exception.
@@ -68,10 +80,22 @@ value:
           - >
             try{
               $this->getText("unset/text.txt");
-              return "No exception thrown";
+              $log .= "\nNo exception thrown";
+              return false;
             }
             catch(Exception $e){
               return true;
             }
-            
-      
+        
+      _04_formtaArgs_works:    
+        method: formatArgs
+        description: |
+          The text is formated sprinf style.
+        steps:
+          - $this->core = new CoreMock();
+          - $this->core->IO->file->data[$formatPath] = $format;
+          - $log .= "format= '$format', ";
+          - $result =$this->formatArgs($formatPath, $args[0], $args[1]);
+          - $log .= "\$args =".var_export($args,true);
+          - $log .="result= '$result', expected= '$formatedText'";
+          - return $result === $formatedText;

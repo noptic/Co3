@@ -17,7 +17,7 @@ class ClassTestCompiler extends CoreUser{
                 $className.$index,
                 $methodName.$index,
                 $format,
-                $classTest->getClass() . '-' . $index
+                $classTest->getClass().', '.$index
             );
         }
         return $script;
