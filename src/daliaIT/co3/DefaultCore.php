@@ -40,7 +40,7 @@ use Spyc,
 class DefaultCore extends Core{
     #:this
     public function boot($conf){
-        $this->conf = $conf;
+        parent::boot
         $parser = new Spyc();
         $rawPackage = $parser->load(
             file_get_contents($this->conf['package']['location'])

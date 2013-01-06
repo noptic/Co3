@@ -82,7 +82,9 @@ abstract class Core extends Inject
     }
     
     #:this
-    public abstract function boot($config);
+    public function boot($config){
+        $this->conf = $config; 
+    }
     
     #:scalar[string]
     public function getConf(){
@@ -131,6 +133,14 @@ abstract class Core extends Inject
         return $this;
     }
     
+    #:scalar[] | &scalar
+    protected function &getConfNode(array $path){
+        if(!$path){
+            return;    
+        }
+        $next = array_shift($path);
+        
+    }
     #:bool
     public function pluginExists( $name ){
         return isset($this->plugins[$name]);   
@@ -178,6 +188,12 @@ abstract class Core extends Inject
     #:EventHandle
     public function getOnPluginSet(){
         return $this->onPluginSet->getHandle();
+    }
+    
+    public function __wakeup(){
+        foreach($this->plugins as $plugin){
+            $plugin->setCore( $this );
+        }
     }
 }
 ?>
