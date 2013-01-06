@@ -1,0 +1,8 @@
+type:   daliaIT\co3\h2o\H2oPlugin
+value:
+  options:
+    isList: 1
+    value:
+      cache: false
+      loader:
+        type: daliaIT\co3\h2o\ResourceTemplateLoader
