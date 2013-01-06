@@ -55,12 +55,12 @@ function(){
             '#SCRIPT#'      => $_SERVER['SCRIPT_FILENAME'],
             '#SCRIPT_DIR#'  => dirname($_SERVER['SCRIPT_FILENAME']),
             '#SCRIPT_HASH#' => md5($_SERVER['SCRIPT_FILENAME']),
-            '#PACKAGE_DIR#' => dirname(__DIR__)
+            '#PACKAGE_DIR#' => dirname(__DIR__),
+            '#TMP#'         => sys_get_temp_dir()
         )
     );    
     foreach($conf['path'] as $name => $dir){
         if(! file_exists($dir)){
-            echo $name;
             mkdir($dir, 0777, true);
         }
     }
