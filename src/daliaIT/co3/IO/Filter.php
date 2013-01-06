@@ -122,4 +122,3 @@ class Filter extends Component implements IFilter
         ));
     }
 }
-?>

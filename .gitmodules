@@ -1,3 +1,6 @@
 [submodule "external/log4php"]
 	path = external/log4php
 	url = git://github.com/apache/log4php.git
+[submodule "external/h2o"]
+	path = external/h2o
+	url = https://github.com/speedmax/h2o-php.git

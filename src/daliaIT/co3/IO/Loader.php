@@ -37,7 +37,10 @@ class Loader extends CoreUser
                         'value' => $item
                     )); 
                 } else {
+                #    echo "\nload item $index\n"; var_dump($item);
                     $items[$index] = $this->load($item) ;
+                 #   echo "\nload returned:\n"; var_dump($items[$index]);
+                    
                 }
             } 
             return $items;

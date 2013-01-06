@@ -54,7 +54,7 @@ class FileFilter extends Filter
         $path = $this->search($relativePath);
         if($path === null){
             throw new InvalidArgumentException(implode("\n",array(
-                "Can not read file '$relativePath",
+                "Can not read file '$relativePath'",
                 "Sources:",
                 implode("\n",$this->sources)
             )));

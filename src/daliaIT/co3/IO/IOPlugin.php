@@ -32,10 +32,24 @@ class IOPlugin extends Plugin
             return $filter;
         } else {
             if(! $this->hasFilter($filter, false)){
-                $this->setFilter( 
-                    $filter, 
-                    $this->getResource("filter/$filter.filter.yvnh") 
+                if(! isset($this->filters['resource'])){
+                    throw new Exception(
+                        "Can not autoload filter '$filter'. No resource filter set."
+                        ."You must set a resource filter to" 
+                        ."autoload other filters."
+                    );
+                }
+                $newFilter = $this->in(
+                    "filter/$filter.filter.yvnh",
+                    "resource"
                 );
+                if(! $newFilter){
+                    throw new InvalidArgumentException(sprintf(
+                        "filter '%s' could not be found.",
+                        print_r($filter,true)
+                    )); 
+                }
+                $this->setFilter($filter, $newFilter);
             }
             return $this->filters[$filter];
         }
