@@ -12,7 +12,8 @@ class  Inject extends Make implements IInject
                 $instance->$property = $properties[$property];
             }
         }
-        return $instance->postInject();
+        $instance->postInject();
+        return $instance;
     }
     
     public static function injectMany($propertiesArray){
