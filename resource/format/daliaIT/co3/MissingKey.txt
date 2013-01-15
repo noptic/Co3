@@ -1,1 +1,1 @@
-Missing mandotory array key "%1".
+Missing mandotory array key "{{ key }}".
