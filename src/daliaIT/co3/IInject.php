@@ -25,7 +25,7 @@ See
  - sample: [Inject][com.daliaIT.co3.Inject]
  - White Paper: [Using Injection][doc: Injection.txt]
 /*/
-interface IInject extends IMake
+interface IInject
 {    
     /*/
     public static object **inject(array $properties)**
