@@ -1,16 +1,25 @@
 <?php
 namespace daliaIT\co3;
-class  Inject extends Make implements IInject
+use ReflectionClass;
+class  Inject implements IInject
 {
     public static function inject($properties){
-        $instance = static::mk();
-        if(! $properties){
-            $properties = array();
+        $class = get_called_class();
+        $args = func_get_args();
+        array_shift($args);
+        if($args){
+            $reflect = new ReflectionClass($class); 
+            $instance = $reflect->newInstanceArgs($args);
+        } else {
+            $instance = new $class();
         }
-        foreach( static::getInjectableProperties() as $property ){
-            if( array_key_exists( $property, $properties ) ){
-                $instance->$property = $properties[$property];
-            }
+            
+        if($properties){
+            foreach( static::getInjectableProperties() as $property ){
+                if( array_key_exists( $property, $properties ) ){
+                    $instance->$property = $properties[$property];
+                }
+            }   
         }
         $instance->postInject();
         return $instance;
