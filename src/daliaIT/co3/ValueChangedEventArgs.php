@@ -6,16 +6,19 @@ class ValueChangedEventArgs extends Inject{
         $newValue,
         $name;
         
-    public function getOldPlugin(){
-        return $this->oldPlugin;
-    }
+    #@get public oldValue newValue mixed#
     
-    public function getNewPlugin(){
-        return $this->newPlugin;
+    #:newValue
+    public function getOldValue(){
+        return $this->oldValue;
     }
+    #@#
+    #@get public name string#
     
+    #:string
     public function getName(){
         return $this->name;
     }
+    #@#
 }
 ?>

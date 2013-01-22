@@ -17,14 +17,11 @@ Source
 namespace daliaIT\co3\IO;
 use \Exception,
     daliaIT\co3\core,
-    daliaIT\co3\CoreUser,
+    daliaIT\co3\ICoreUser,
     daliaIT\co3\IPlugin;
 
-class Loader extends CoreUser
-{
-    protected 
-        $core;
-    
+class Loader implements ICoreUser
+{   
     public function load($data){
         if(! is_array($data) ){
             return $data;
@@ -94,7 +91,39 @@ class Loader extends CoreUser
         }
     }
     
-    public function setCore(Core $core){
-        $this->core = $core;
-    }
+    #@import daliaIT\co3\CoreUser#
+    
+        protected
+        #:Core    
+            $core;
+            
+        
+        #:Core
+        public function getCore(){
+            return $this->core;
+        }
+        
+        #:this
+        public function setCore(Core $core){
+            $this->core = $core;
+            $this->injectCore( get_object_vars($this) );
+            return $this;
+        }
+        
+        #:this
+        protected function injectCore($targets){
+            foreach($targets as $target){
+                if(
+                    $target instanceof ICoreUser 
+                    && $target->getCore() !== $this->core
+                ){
+                    $target->setCore($this->core);    
+                }
+                if(is_array($target)){
+                    $this->injectCore($target);
+                }
+            }
+            return $this;
+        }
+    #@#
 }

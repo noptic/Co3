@@ -59,10 +59,6 @@ class IOPlugin extends Plugin
         return isset($this->filters[$name]);
     }
     
-    public function getFilters(){
-        return $this->filters;    
-    }
-    
     public function setFilter($name, IFilter $filter){
         if($this->getCore() !== null){
             $filter->setCore($this->getCore()); 
@@ -127,4 +123,12 @@ class IOPlugin extends Plugin
     public function __get($name){
         return $this->getFilter($name);
     }
+    
+    #@get public filters array#
+    
+    #:array
+    public function getFilters(){
+        return $this->filters;
+    }
+    #@#
 }

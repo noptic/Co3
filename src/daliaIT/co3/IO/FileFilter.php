@@ -98,4 +98,6 @@ class FileFilter extends Filter
         }
         return implode('/',$finalParts);
     }
+
+    #access public public sources array@#
 }

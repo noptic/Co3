@@ -87,10 +87,13 @@ class Event extends Inject implements IEvent{
         return $this;
     }
     
-    #:object
+    #@get public owner#
+    
+    #:mixed
     public function getOwner(){
         return $this->owner;
     }
+    #@#
     
     #:EventHandle
     public function getHandle(){

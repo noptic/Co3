@@ -56,8 +56,18 @@ class EventHandle extends Inject
         $this->event->unbind($callback);
     }
     
-    public function getOwner(){
-        return $this->event->getOwner();
+    #@get public owner
+                    public function getOwner(){
+                        return $this->event->getOwner();
+                    }
+                    #
+    
+    #:public
+    public function getOwner
+    (){
+        return $this->owner
+    ;
     }
+    #@#
 }
 ?>

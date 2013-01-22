@@ -32,10 +32,6 @@ use ReflectionProperty;
 
 abstract class Plugin extends Component implements IPlugin
 {    
-       
-    protected 
-        $core;
-    
     public function init( $name ){
         
     }

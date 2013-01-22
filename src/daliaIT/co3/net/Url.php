@@ -5,15 +5,15 @@ class Link extends Inject
 {
     protected
     #>string
-        $schema,#TODO scheme
-        $host,#TODO host
+        $schema,
+        $host,
         $path,
-        $pass,#TODO pass
+        $pass,
         $user,
-        $fragment #TODO implement
+        $fragment,
         #<
     #:strin[]
-        $querry,#TODO query
+        $querry,
     #:int
         $port;
 
@@ -30,22 +30,22 @@ class Link extends Inject
             $str.='?';
             $chunks=array();
             foreach($this->querry as $name => $value){
-                $chunks[] ($value !== null) "$name=$value" : $name;
+                $chunks[] = ($value !== null)? "$name=$value" : $name;
             }
             $str .= implode('&',$chunks);
         }
         if( $this->fragment ){
             $str .= "#{$this->fragment}";
-    public function get(){
-        return $this->
+        }
     }
+    #@access public public [schema host path pass user fragment] string#
     
     #:string
     public function getSchema(){
         return $this->schema;
     }
     
-    #:string 
+    #:string
     public function getHost(){
         return $this->host;
     }
@@ -65,13 +65,106 @@ class Link extends Inject
         return $this->user;
     }
     
-    #:string[]
+    #:string
+    public function getFragment(){
+        return $this->fragment;
+    }
+    
+    #:this
+    public function setSchema($value){
+        if(! is_string($value)){
+           throw new \InvalidArgumentException(
+             __METHOD__ .' expects a string but got a '.gettype($value)
+           );
+        }
+        $this->schema = $value;
+        return $this;
+    }
+    
+    #:this
+    public function setHost($value){
+        if(! is_string($value)){
+           throw new \InvalidArgumentException(
+             __METHOD__ .' expects a string but got a '.gettype($value)
+           );
+        }
+        $this->host = $value;
+        return $this;
+    }
+    
+    #:this
+    public function setPath($value){
+        if(! is_string($value)){
+           throw new \InvalidArgumentException(
+             __METHOD__ .' expects a string but got a '.gettype($value)
+           );
+        }
+        $this->path = $value;
+        return $this;
+    }
+    
+    #:this
+    public function setPass($value){
+        if(! is_string($value)){
+           throw new \InvalidArgumentException(
+             __METHOD__ .' expects a string but got a '.gettype($value)
+           );
+        }
+        $this->pass = $value;
+        return $this;
+    }
+    
+    #:this
+    public function setUser($value){
+        if(! is_string($value)){
+           throw new \InvalidArgumentException(
+             __METHOD__ .' expects a string but got a '.gettype($value)
+           );
+        }
+        $this->user = $value;
+        return $this;
+    }
+    
+    #:this
+    public function setFragment($value){
+        if(! is_string($value)){
+           throw new \InvalidArgumentException(
+             __METHOD__ .' expects a string but got a '.gettype($value)
+           );
+        }
+        $this->fragment = $value;
+        return $this;
+    }
+    #@#
+    #@access public public querry array#
+    
+    #:array
     public function getQuerry(){
         return $this->querry;
     }
+    
+    #:this
+    public function setQuerry(array $value){
+        $this->querry = $value;
+        return $this;
+    }
+    #@#
+    #@access public public port int#
     
     #:int
     public function getPort(){
         return $this->port;
     }
+    
+    #:this
+    public function setPort($value){
+        if(! is_int($value)){
+           throw new \InvalidArgumentException(
+             __METHOD__ .' expects a int but got a '.gettype($value)
+           );
+        }
+        $this->port = $value;
+        return $this;
+    }
+    #@#
 }

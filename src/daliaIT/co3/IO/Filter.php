@@ -99,10 +99,6 @@ class Filter extends Component implements IFilter
         $isInFilter = false,
         $isOutFilter = false;
         #<
-        
-    public function getIsInFilter(){return $this->isInFilter;}
-    public function getIsOutFilter(){return $this->isOutFilter;}
-    
     
     #:mixed
     public function out($data){
@@ -121,4 +117,17 @@ class Filter extends Component implements IFilter
             "$class::".__FUNCTION__
         ));
     }
+    
+    #@get public [isInFilter isOutFilter] bool#
+    
+    #:bool
+    public function getIsInFilter(){
+        return $this->isInFilter;
+    }
+    
+    #:bool
+    public function getIsOutFilter(){
+        return $this->isOutFilter;
+    }
+    #@#
 }

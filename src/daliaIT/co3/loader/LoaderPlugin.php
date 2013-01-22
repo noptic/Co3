@@ -28,10 +28,6 @@ class LoaderPlugin extends Plugin{
     protected
         $loaders = array();
     
-    public function getLoaders(){
-        return $this->loaders;
-    }
-    
     public function addLoader($name, $loader){
         $this->loaders[$name] = $loader;
     }
@@ -39,4 +35,12 @@ class LoaderPlugin extends Plugin{
     public function getLoader($name){
         return $this->loaders[$name];
     }
+    
+    #@get public loaders array#
+    
+    #:array
+    public function getLoaders(){
+        return $this->loaders;
+    }
+    #@#
 }

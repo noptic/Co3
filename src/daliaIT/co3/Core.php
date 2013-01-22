@@ -70,7 +70,7 @@ abstract class Core extends Inject
         $onPluginSet,
     #:Plugin[string]
         $plugins = array(),
-    #:scalar[scalar]
+    #:array
         $conf;
         
     private

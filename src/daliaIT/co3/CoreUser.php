@@ -25,16 +25,18 @@ Source
 --------------------------------------------------------------------------------
 /*/
 namespace daliaIT\co3;
-class CoreUser extends Inject implements ICoreUser{
+class CoreUser implements ICoreUser{
     protected
-    #;Core    
+    #:Core    
         $core;
+        
+    #@get public core Core#
     
     #:Core
     public function getCore(){
         return $this->core;
     }
-    
+    #@#
     #:this
     public function setCore(Core $core){
         $this->core = $core;

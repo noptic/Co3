@@ -21,43 +21,92 @@ class Package extends Inject
         $dependencies;
         #<
     
-    #:string
-    public function geName(){ 
-        return $this->name; 
+    #@access public public [name author license src id resource]#
+    
+    public function getName(){
+        return $this->name;
     }
     
-    #:string
-    public function getAuthor(){ 
-        return $this->author; 
+    public function getAuthor(){
+        return $this->author;
     }
     
-    #:string
-    public function getLicense(){ 
-        return $this->license; 
+    public function getLicense(){
+        return $this->license;
     }
     
-    #:string 
-    public function getSrc(){ 
-        return $this->src; 
+    public function getSrc(){
+        return $this->src;
     }
     
-    #:string
     public function getId(){
         return $this->id;
     }
     
-    #:string
     public function getResource(){
         return $this->resource;
     }
     
-    #:string[]
+    #:this
+    public function setName($value){
+        $this->name = $value;
+        return $this;
+    }
+    
+    #:this
+    public function setAuthor($value){
+        $this->author = $value;
+        return $this;
+    }
+    
+    #:this
+    public function setLicense($value){
+        $this->license = $value;
+        return $this;
+    }
+    
+    #:this
+    public function setSrc($value){
+        $this->src = $value;
+        return $this;
+    }
+    
+    #:this
+    public function setId($value){
+        $this->id = $value;
+        return $this;
+    }
+    
+    #:this
+    public function setResource($value){
+        $this->resource = $value;
+        return $this;
+    }
+    #@#
+    #@access public public includes array#
+    
+    #:array
     public function getIncludes(){
         return $this->includes;
     }
     
-    #:Dependency[]
+    #:this
+    public function setIncludes(array $value){
+        $this->includes = $value;
+        return $this;
+    }
+    #@#
+    #@access public public dependencies array#
+    
+    #:array
     public function getDependencies(){
         return $this->dependencies;
     }
+    
+    #:this
+    public function setDependencies(array $value){
+        $this->dependencies = $value;
+        return $this;
+    }
+    #@#
 }
