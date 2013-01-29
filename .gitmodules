@@ -4,6 +4,3 @@
 [submodule "external/h2o"]
 	path = external/h2o
 	url = https://github.com/speedmax/h2o-php.git
-[submodule "external/CoLoad"]
-	path = external/CoLoad
-	url = git@github.com:noptic/CoLoad.git
