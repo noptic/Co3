@@ -10,7 +10,7 @@ function(){
         $core;
 
     //load conf
-    $spyc = new Spyc();
+    $parser = new Symfony\Component\Yaml\Parser();
     $configFile = __DIR__.'/conf.yaml';
     if(! is_readable($configFile)){
         throw new Exception(
@@ -18,14 +18,14 @@ function(){
             ."Missing system file '{$confFile}'"
         );
     }
-    $conf = $spyc->load( file_get_contents($configFile), true );
+    $conf = $parser->parse( file_get_contents($configFile));
     if( $conf === null) throw new Exception(
             "co3 Bootstrap error: "
             ."Parsing config file failed: '{$configFile}'"
     );
     $localConfigFile = __DIR__.'/conf.local.yaml';
     if(is_readable($localConfigFile)){
-        $localConfig = $spyc->load( file_get_contents($localConfigFile), true );
+        $localConfig = $parser->parse( file_get_contents($localConfigFile), true );
         if( $localConfig === null) throw new Exception(
             "co3 Bootstrap error: "
             ."Parsing local config file failed: '{$localConfigFile}'"
