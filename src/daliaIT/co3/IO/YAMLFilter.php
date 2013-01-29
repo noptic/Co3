@@ -26,11 +26,11 @@ Source
 --------------------------------------------------------------------------------
 /*/
 namespace daliaIT\co3\IO;
-use Spyc;
+use Symfony\Component\Yaml\Parser;
 class YAMLFilter extends Filter
 {
     public
-    #:Spyc
+    #:Parser
         $parser,
     #>int
         $indent = 2,
@@ -38,11 +38,11 @@ class YAMLFilter extends Filter
         #<
     
     public function __construct(){
-        $this->parser = new Spyc();
+        $this->parser = new Parser();
     }
     
     public function in($string){
-        return $this->parser->load($string);
+        return $this->parser->parse($string);
     }
     
     public function out($data){

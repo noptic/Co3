@@ -15,7 +15,6 @@ class PackagePlugin extends Plugin{
     
     const
     #>type int
-        LOAD_CLASS = 1,
         LOAD_RESOURCE = 2,
         LOAD_DEPENDENCIES = 8,
         LOAD_INCLUDES = 16,
@@ -37,10 +36,6 @@ class PackagePlugin extends Plugin{
         } else {
             $this->loadedPackages[$name] = $package;
             $this->packageOptions[$name] = $options;
-        }
- 
-        if( ($options & self::LOAD_CLASS) && $package->getSrc()  ){
-            $this->addClassSource( $packageDir.'/'.$package->getSrc() );
         }
         if( ($options & self::LOAD_RESOURCE) && $package->getResource() ){
             $this->addFileSource( $packageDir.'/'.$package->getResource() );
@@ -141,12 +136,6 @@ class PackagePlugin extends Plugin{
         $this->packageOptions[$name] = $options  | $$oldOptions;
         $options = $options & ~$oldOptions;
         return $options;
-    }
-    
-    #:return this
-    protected function addClassSource($src){
-        $this->core->loader->getLoader('main')->addSource($src);
-        return $this;
     }
     
     #:return this

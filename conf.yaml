@@ -3,25 +3,6 @@ timezone: "Europe/London"
 flag:
   log:      true
   
-require:
-  - "#BOOT_DIR#/external/CoLoad/CoLoad.php"
-  - "#BOOT_DIR#/external/log4php/src/main/php/Logger.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/IMake.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/Make.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/IInject.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/Inject.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/Core.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/IEvent.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/Event.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/ICoreUser.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/IClassHasResource.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/IComponent.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/CoreUser.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/Component.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/IPlugin.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/Plugin.php"
-  - "#BOOT_DIR#/src/daliaIT/co3/DefaultCore.php"
-
 core:          
   class: "daliaIT\co3\DefaultCore"
   args": []

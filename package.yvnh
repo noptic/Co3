@@ -5,7 +5,6 @@ value:
   resource:     resource
   plugins:
     app:            daliaIT\co3\app\AppPlugin
-    loader:         daliaIT\vo3\loader\LoaderPlugin
     IO:             daliaIT\co3\IO\IOPlugin
     package:        daliaIT\co3\package\PackagePlugin
     log:            daliaIT\co3\log\LogPlugin

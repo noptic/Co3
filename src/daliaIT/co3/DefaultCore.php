@@ -16,7 +16,6 @@ The default co3config will use this core.
 List of preset pluins:
 --------------------------------------------------------------------------------
 IO:         daliaIT\co3\IO\IOPlugin
-loader:     daliaIT\co3\loader\LoaderPlugin
 package:    daliaIT\co3\package\PackagePlugin
 
 Source
@@ -27,13 +26,12 @@ use Spyc,
     Exception,
     OutOfRangeException,
     UnexpectedValueException,
-    daliaIT\CoLoad\CoLoad,
+    Symfony\Component\Yaml\Parser,
     daliaIT\co3\IO\IOPlugin,
     daliaIT\co3\IO\FileFilter,
     daliaIT\co3\IO\ResourceFilter,
     daliaIT\co3\IO\YAMLFilter,
     daliaIT\co3\IO\VNHFilter,
-    daliaIT\co3\loader\LoaderPlugin,
     daliaIT\co3\package\Package,
     daliaIT\co3\package\PackagePlugin;
     
@@ -41,31 +39,15 @@ class DefaultCore extends Core{
     #:this
     public function boot($conf){
         parent::boot($conf);
-        $parser = new Spyc();
-        $rawPackage = $parser->load(
+        $parser = new Parser();
+        $rawPackage = $parser->parse(
             file_get_contents($this->conf['package']['location'])
         );
-        $rawPackage = $rawPackage['value'];
-        $this->setPlugin('loader',$this->createLoaderPlugin($rawPackage));        
+        $rawPackage = $rawPackage['value'];        
         $this
             ->createIOPlugin($rawPackage)
             ->createPackagePlugin($rawPackage)
             ->loadDependencies();
-    }
-    
-    #:LoaderPlugin
-    protected function createLoaderPlugin($rawPackage){
-        $src = (isset($rawPackage['src']))
-            ? array($this->getConfValue('path/co3dir').'/'.$rawPackage['src'])
-            : array();
-        $loader = new CoLoad(
-            $this->conf['path']['tmp'].'/classMap.json',
-            $src
-        );
-        $loader->register();
-        return LoaderPlugin::inject(array(
-            'loaders' => array( 'main' => $loader)
-        ));
     }
     
     #:this
