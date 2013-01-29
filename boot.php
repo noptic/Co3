@@ -1,5 +1,4 @@
 <?php
-require __DIR__.'/external/spyc/spyc.php';
 $core = null;
 if(! isset($co3Config) ){
     $co3Config = array();
